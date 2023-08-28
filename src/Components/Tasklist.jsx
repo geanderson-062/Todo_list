@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/main.css";
 import "../App";
+import Swal from "sweetalert2";
 
 export default function Search() {
   const [tasks, setTasks] = useState([]);
@@ -25,7 +26,14 @@ export default function Search() {
       setNewNametask("");
       setNewDate("");
     } else {
-      alert("Preencha todos os campos antes de adicionar a tarefa.");
+      //alert
+      Swal.fire({
+        title: "Erro!",
+        text: "Preencha todos os campos antes de adicionar a tarefa.",
+        icon: "error",
+        confirmButtonText: "ok",
+        confirmButtonColor: "#000",
+      });
     }
   };
 
@@ -51,6 +59,17 @@ export default function Search() {
     const updatedDate = date.filter((_, i) => i !== index);
     setDate(updatedDate);
   };
+
+  const infoAlert = () => {
+    Swal.fire({
+      title: "Sistema de Lista de Tarefas Simples",
+      text: "Imagine um aplicativo que ajuda você a lembrar o que precisa fazer. Você escreve o que quer fazer e adiciona na lista. Se esquecer de escrever, ele avisa. As coisas que escreve aparecem na lista. Se terminar uma tarefa, pode tirar da lista. É como um lembrete para suas tarefas.",
+      icon: "info",
+      confirmButtonText: "Ok",
+      confirmButtonColor: "#000",
+    });
+  };
+
   return (
     <div className="container">
       <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
@@ -136,7 +155,11 @@ export default function Search() {
               >
                 Cancelar
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={infoAlert}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="25"
