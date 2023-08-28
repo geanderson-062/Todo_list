@@ -6,6 +6,9 @@ export default function Search() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
+  const [nametask, setNametask] = useState([]);
+  const [newNametask, setNewNametask] = useState("");
+
   const addTask = () => {
     if (newTask.trim() !== "") {
       setTasks([...tasks, newTask]);
@@ -13,20 +16,33 @@ export default function Search() {
     }
   };
 
+  const addNametask = () => {
+    if (newNametask.trim() !== "") {
+      setNametask([...nametask, newNametask]);
+      setNewNametask("");
+    }
+  };
+
   const removeTask = (index) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
+    const updatedNametask = nametask.filter((_, i) => i !== index);
+    setNametask(updatedNametask);
   };
   return (
-    <div className="TaskList">
-      <button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
-      >
-        Adicionar uma nova tarefa
-      </button>
+    <div className="container">
+      <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+          style={{ marginLeft: "20%", marginRight: "20%" }}
+        >
+          Nova tarefa
+        </button>
+      </div>
+
       <br />
       <div
         className="modal fade"
@@ -51,7 +67,15 @@ export default function Search() {
               ></button>
             </div>
             <div className="modal-body">
-              <div className="input-group mb-3">
+              <div className="input mb-3">
+                <input
+                  type="text"
+                  value={newNametask}
+                  onChange={(e) => setNewNametask(e.target.value)}
+                  className="form-control"
+                  placeholder="Digite o nome da tarefa"
+                />
+                <br />
                 <input
                   type="text"
                   value={newTask}
@@ -59,12 +83,17 @@ export default function Search() {
                   className="form-control"
                   placeholder="Digite uma tarefa"
                 />
+              </div>
+              <div className="d-grid gap-2 col-6 mx-auto">
                 <button
                   className="btn btn-primary"
                   type="button"
-                  onClick={addTask}
+                  onClick={() => {
+                    addTask();
+                    addNametask();
+                  }}
                 >
-                  Criar
+                  Adicionar
                 </button>
               </div>
             </div>
@@ -74,50 +103,50 @@ export default function Search() {
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
               >
-                Fechar
+                Cancelar
               </button>
               <button type="button" className="btn btn-primary">
-                Informações
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  fill="currentColor"
+                  className="bi bi-info"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                </svg>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <ul className="TaskBoard">
+      <div className="TaskBoard">
         {tasks.map((task, index) => (
           <>
-            <br />
-            <li className="TaskIten" key={index}>
-              <a className="fs-6 text-dark" style={{ marginLeft: 5 }}>
-                {task}
-              </a>
-              <button
-                onClick={() => removeTask(index)}
-                className="btn btn-danger btn-sm text-white"
-                style={{
-                  marginTop: 5,
-                  marginLeft: 5,
-                  marginRight: 5,
-                  marginBottom: 5,
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-trash3-fill"
-                  viewBox="0 0 16 16"
+            <div className="card text-center">
+              <div className="card-header">{nametask[index]}</div>
+              <div className="card-body">
+                <p className="card-text">{task}</p>
+                <button
+                  href="#"
+                  className="btn btn-danger"
+                  onClick={() => {
+                    removeTask(index);
+                    removeNametask(index);
+                  }}
                 >
-                  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                </svg>
-              </button>
-            </li>
+                  Deletar
+                </button>
+              </div>
+              <div className="card-footer text-body-secondary">2 days ago</div>
+            </div>
+
             <br />
           </>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
