@@ -9,10 +9,20 @@ export default function Search() {
   const [nametask, setNametask] = useState([]);
   const [newNametask, setNewNametask] = useState("");
 
+  const [date, setDate] = useState([]);
+  const [newDate, setNewDate] = useState("");
+
   const addTask = () => {
     if (newTask.trim() !== "") {
       setTasks([...tasks, newTask]);
       setNewTask("");
+    }
+  };
+
+  const addDate = () => {
+    if (newDate.trim() !== "") {
+      setDate([...date, newDate]);
+      setNewDate("");
     }
   };
 
@@ -28,6 +38,8 @@ export default function Search() {
     setTasks(updatedTasks);
     const updatedNametask = nametask.filter((_, i) => i !== index);
     setNametask(updatedNametask);
+    const updatedDate = date.filter((_, i) => i !== index);
+    setDate(updatedDate);
   };
   return (
     <div className="container">
@@ -49,7 +61,7 @@ export default function Search() {
         id="staticBackdrop"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
@@ -83,6 +95,14 @@ export default function Search() {
                   className="form-control"
                   placeholder="Digite uma tarefa"
                 />
+                <br />
+                <input
+                  type="text"
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                  className="form-control"
+                  placeholder="Digite a data de conclusão"
+                />
               </div>
               <div className="d-grid gap-2 col-6 mx-auto">
                 <button
@@ -91,6 +111,7 @@ export default function Search() {
                   onClick={() => {
                     addTask();
                     addNametask();
+                    addDate();
                   }}
                 >
                   Adicionar
@@ -134,13 +155,14 @@ export default function Search() {
                   className="btn btn-danger"
                   onClick={() => {
                     removeTask(index);
-                    removeNametask(index);
                   }}
                 >
                   Deletar
                 </button>
               </div>
-              <div className="card-footer text-body-secondary">2 days ago</div>
+              <div className="card-footer text-body-secondary">
+                Data de conclusão {date[index]}
+              </div>
             </div>
 
             <br />
