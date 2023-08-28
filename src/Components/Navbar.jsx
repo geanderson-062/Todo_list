@@ -1,9 +1,10 @@
 import { Component } from "react";
+import "../styles/index.css";
 
 export default class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar bg-body-tertiary">
+      <nav className="navbar colorPrimary">
         <div className="container-fluid">
           <h1 className="navbar-brand fs-4">
             <svg

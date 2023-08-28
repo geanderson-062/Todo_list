@@ -1,4 +1,7 @@
+import React from "react";
+//bootstrapp
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
 
 import Navbar from "./Components/Navbar";
 import Tasklist from "./Components/Tasklist";
