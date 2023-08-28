@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../styles/main.css";
 import "../App";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
