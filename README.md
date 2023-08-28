@@ -1,0 +1,2 @@
+# Todo-list-react-vite
+ Descrição do Projeto: Aplicativo de Lista de Tarefas com React e Vite  O projeto "Aplicativo de Lista de Tarefas com React e Vite" é uma aplicação web moderna que permite aos usuários gerenciar suas tarefas de maneira eficiente. Desenvolvido utilizando as tecnologias React e Vite, o projeto oferece uma experiência de usuário responsiva e fluida, combinada com um fluxo de desenvolvimento rápido.
