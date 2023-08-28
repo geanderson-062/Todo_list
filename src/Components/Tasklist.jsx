@@ -2,6 +2,8 @@ import { useState } from "react";
 import "../styles/main.css";
 import "../App";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
+import ScrollReveal from "scrollreveal";
 
 export default function Search() {
   const [tasks, setTasks] = useState([]);
@@ -69,6 +71,16 @@ export default function Search() {
       confirmButtonColor: "#000",
     });
   };
+
+  useEffect(() => {
+    ScrollReveal().reveal(".scroll-reveal", {
+      duration: 1000,
+      distance: "20px",
+      easing: "ease-in-out",
+      origin: "bottom",
+      delay: 100,
+    });
+  }, []);
 
   return (
     <div className="container">
@@ -178,7 +190,9 @@ export default function Search() {
 
       <div>
         {tasks.length === 0 ? (
-          <p className="fs-1 text-center">Nenhuma tarefa em andamento.</p>
+          <p className="fs-1 text-center scroll-reveal">
+            Nenhuma tarefa em andamento.
+          </p>
         ) : (
           tasks.map((task, index) => (
             <>
