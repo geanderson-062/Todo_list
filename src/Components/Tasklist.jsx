@@ -6,6 +6,24 @@ import { useEffect } from "react";
 import ScrollReveal from "scrollreveal";
 
 export default function Search() {
+  const confirmRemoveTask = (index) => {
+    Swal.fire({
+      title: "Confirmação",
+      text: "Tem certeza de que deseja excluir esta tarefa?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#0D6EFD",
+      cancelButtonColor: "#DC3545",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeTask(index);
+        Swal.fire("Excluído!", "A tarefa foi excluída com sucesso.", "success");
+      }
+    });
+  };
+
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
@@ -34,7 +52,7 @@ export default function Search() {
         text: "Preencha todos os campos antes de adicionar a tarefa.",
         icon: "error",
         confirmButtonText: "ok",
-        confirmButtonColor: "#000",
+        confirmButtonColor: "#0D6EFD",
       });
     }
   };
@@ -68,7 +86,7 @@ export default function Search() {
       text: "Imagine um aplicativo que ajuda você a lembrar o que precisa fazer. Você escreve o que quer fazer e adiciona na lista. Se esquecer de escrever, ele avisa. As coisas que escreve aparecem na lista. Se terminar uma tarefa, pode tirar da lista. É como um lembrete para suas tarefas.",
       icon: "info",
       confirmButtonText: "Ok",
-      confirmButtonColor: "#000",
+      confirmButtonColor: "#0D6EFD",
     });
   };
 
@@ -110,7 +128,7 @@ export default function Search() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                Tasklist
+                Todo list
               </h1>
               <button
                 type="button"
@@ -216,7 +234,7 @@ export default function Search() {
                         href="#"
                         className="btn btn-danger"
                         onClick={() => {
-                          removeTask(index);
+                          confirmRemoveTask(index);
                         }}
                       >
                         <svg
