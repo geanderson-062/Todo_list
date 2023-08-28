@@ -50,8 +50,9 @@ The Simple Todo List App is a React application that helps you keep track of tas
 
 ## Screenshots
 
-![App Screenshot](/screenshots/screenshot1.png)
-![App Screenshot](/screenshots/screenshot2.png)
+![App Screenshot](https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile.png)
+![App Screenshot](<https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile%20(1).png>)
+![App Screenshot](<https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile%20(2).png>)
 
 ## License
 
