@@ -1,0 +1,33 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - main  # Mude para a branch que você deseja implantar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build  # Substitua pelo comando de build do seu projeto
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          npm run deploy  # Substitua pelo comando de deploy do seu projeto
+
+      - name: Deploy Complete
+        run: echo "Deployment Complete!"
