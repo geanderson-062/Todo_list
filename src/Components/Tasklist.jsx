@@ -151,7 +151,7 @@ export default function Search() {
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
                   className="form-control"
-                  placeholder="Digite uma tarefa"
+                  placeholder="Digite uma descrição"
                 />
                 <br />
                 <input
@@ -217,8 +217,8 @@ export default function Search() {
               <table className="table table-secondary table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Nome da tarefa</th>
                     <th scope="col">Tarefa</th>
+                    <th scope="col">Descrição</th>
                     <th scope="col">Data</th>
                     <th scope="col">Ações</th>
                   </tr>
