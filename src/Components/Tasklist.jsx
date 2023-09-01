@@ -155,6 +155,45 @@ export default function Search() {
     });
   }, []);
 
+  // Função para exportar a lista de tarefas em um arquivo de texto
+  const exportarListaTarefas = () => {
+    // Verifica se a lista de tarefas está vazia
+    if (tarefas.length === 0) {
+      Swal.fire({
+        title: "Lista Vazia",
+        text: "A lista de tarefas está vazia. Não há nada para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+      return;
+    }
+
+    // Cria o conteúdo do arquivo de texto
+    const conteudo = tarefas
+      .map((tarefa, index) => {
+        return `${nomeTarefa[index]} - ${tarefa} - ${data[index]}\n`;
+      })
+      .join("");
+
+    // Cria um objeto Blob com o conteúdo do arquivo de texto
+    const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+
+    // Cria um objeto URL para o Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Cria um elemento de âncora para fazer o download do arquivo
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lista_de_tarefas.txt";
+
+    // Clica automaticamente no link de download
+    a.click();
+
+    // Libera o objeto URL
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="container">
       <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
@@ -166,6 +205,14 @@ export default function Search() {
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
           Nova tarefa
+        </button>
+        <button
+          type="button"
+          className="btn btn-success"
+          onClick={exportarListaTarefas}
+          style={{ marginLeft: "20%", marginRight: "20%" }}
+        >
+          Exportar
         </button>
       </div>
 
