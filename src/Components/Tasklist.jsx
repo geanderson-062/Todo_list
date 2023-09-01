@@ -194,6 +194,62 @@ export default function Search() {
     window.URL.revokeObjectURL(url);
   };
 
+  const [importedTasks, setImportedTasks] = useState(""); // Estado para armazenar o conteúdo do arquivo importado
+
+  const [showImportModal, setShowImportModal] = useState(false); // Estado para controlar a exibição do modal de importação
+
+  // Função para importar tarefas a partir de um arquivo de texto
+  const importarTarefas = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".txt";
+
+    input.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          setImportedTasks(content);
+          setShowImportModal(true); // Exibe o modal após importar o arquivo
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    input.click();
+  };
+
+  // Função para processar e adicionar as tarefas importadas
+  const adicionarTarefasImportadas = () => {
+    if (importedTasks.trim() !== "") {
+      const lines = importedTasks.split("\n");
+      const importedTasksArray = lines.map((line) => {
+        const [nome, descricao, data] = line.split(" - ");
+        return { nome, descricao, data };
+      });
+
+      const updatedTasks = [
+        ...tarefas,
+        ...importedTasksArray.map((task) => task.descricao),
+      ];
+      const updatedNames = [
+        ...nomeTarefa,
+        ...importedTasksArray.map((task) => task.nome),
+      ];
+      const updatedDates = [
+        ...data,
+        ...importedTasksArray.map((task) => task.data),
+      ];
+
+      setTarefas(updatedTasks);
+      setNomeTarefa(updatedNames);
+      setData(updatedDates);
+
+      setImportedTasks(""); // Limpa o conteúdo importado
+    }
+  };
+
   return (
     <div className="container">
       <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
@@ -209,6 +265,14 @@ export default function Search() {
         <button
           type="button"
           className="btn btn-success"
+          onClick={importarTarefas}
+          style={{ marginLeft: "20%", marginRight: "20%" }}
+        >
+          Importar
+        </button>
+        <button
+          type="button"
+          className="btn btn-success"
           onClick={exportarListaTarefas}
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
@@ -217,6 +281,58 @@ export default function Search() {
       </div>
 
       <br />
+      {/* Modal para visualizar e adicionar tarefas importadas */}
+      <div
+        className={`modal fade ${showImportModal ? "show" : ""}`}
+        style={{ display: showImportModal ? "block" : "none" }}
+        id="importModal"
+        tabIndex="-1"
+        aria-labelledby="importModalLabel"
+        aria-hidden={!showImportModal}
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="importModalLabel">
+                Tarefas Importadas
+              </h4>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowImportModal(false)}
+                aria-label="Fechar"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <textarea
+                rows="5"
+                className="form-control"
+                value={importedTasks}
+                onChange={(e) => setImportedTasks(e.target.value)}
+              ></textarea>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => setShowImportModal(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn btn-success"
+                type="button"
+                onClick={() => {
+                  adicionarTarefasImportadas();
+                  setShowImportModal(false);
+                }}
+              >
+                Adicionar Tarefas Importadas
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Modal de Nova tarefa */}
       <div
         className="modal fade"
