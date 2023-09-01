@@ -97,6 +97,21 @@ export default function Search() {
     }
   };
 
+  const handleDateChange = (e) => {
+    const value = e.target.value;
+    if (/^[0-9]*$/.test(value) || value === "") {
+      setNovaData(value);
+    } else {
+      Swal.fire({
+        title: "Erro!",
+        text: "A data deve conter apenas números.",
+        icon: "error",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+    }
+  };
+
   const adicionarData = () => {
     if (novaData.trim() !== "") {
       setData([...data, novaData]);
@@ -199,7 +214,7 @@ export default function Search() {
                 <input
                   type="text"
                   value={novaData}
-                  onChange={(e) => setNovaData(e.target.value)}
+                  onChange={handleDateChange}
                   className="form-control"
                   placeholder="Digite a data de conclusão"
                 />
@@ -239,7 +254,7 @@ export default function Search() {
                   className="bi bi-info"
                   viewBox="0 0 16 16"
                 >
-                  <path d="M8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897+.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                  <path d="M8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897+.105 1.319+.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                 </svg>
               </button>
             </div>
@@ -358,7 +373,7 @@ export default function Search() {
                         <input
                           type="text"
                           value={novaData}
-                          onChange={(e) => setNovaData(e.target.value)}
+                          onChange={handleDateChange}
                           className="form-control"
                           placeholder="Digite a data de conclusão"
                         />
