@@ -220,26 +220,37 @@ export default function Search() {
     input.click();
   };
 
-  // Função para processar e adicionar as tarefas importadas
   const adicionarTarefasImportadas = () => {
     if (importedTasks.trim() !== "") {
       const lines = importedTasks.split("\n");
       const importedTasksArray = lines.map((line) => {
         const [nome, descricao, data] = line.split(" - ");
-        return { nome, descricao, data };
+        // Verifique se todos os campos são preenchidos e se o formato está correto
+        if (nome && descricao && data) {
+          return { nome, descricao, data };
+        } else {
+          // Trate os casos em que o formato não está correto
+          // Você pode mostrar uma mensagem de erro ou lidar com isso de outra forma
+          return null;
+        }
       });
+
+      // Filtrar os itens nulos (caso o formato não esteja correto)
+      const validImportedTasksArray = importedTasksArray.filter(
+        (task) => task !== null
+      );
 
       const updatedTasks = [
         ...tarefas,
-        ...importedTasksArray.map((task) => task.descricao),
+        ...validImportedTasksArray.map((task) => task.descricao),
       ];
       const updatedNames = [
         ...nomeTarefa,
-        ...importedTasksArray.map((task) => task.nome),
+        ...validImportedTasksArray.map((task) => task.nome),
       ];
       const updatedDates = [
         ...data,
-        ...importedTasksArray.map((task) => task.data),
+        ...validImportedTasksArray.map((task) => task.data),
       ];
 
       setTarefas(updatedTasks);
