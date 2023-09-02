@@ -45,6 +45,8 @@ export default function Search() {
 
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
 
+  const [showExportButton, setShowExportButton] = useState(false);
+
   const adicionarTarefa = () => {
     if (
       novaTarefa.trim() !== "" &&
@@ -162,6 +164,11 @@ export default function Search() {
   useEffect(() => {
     // Verifique se há mais de uma tarefa para mostrar o botão "Excluir Todas as Tarefas"
     setShowDeleteAllButton(tarefas.length > 1);
+  }, [tarefas]);
+
+  useEffect(() => {
+    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
+    setShowExportButton(tarefas.length > 0);
   }, [tarefas]);
 
   useEffect(() => {
@@ -308,28 +315,30 @@ export default function Search() {
             <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
           </svg>
         </button>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={exportarListaTarefas}
-          style={{ marginLeft: "20%", marginRight: "20%" }}
-        >
-          Exportar
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            style={{ marginLeft: 5 }}
-            fill="currentColor"
-            class="bi bi-filetype-txt"
-            viewBox="0 0 16 16"
+        {showExportButton && (
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={exportarListaTarefas}
+            style={{ marginLeft: "20%", marginRight: "20%" }}
           >
-            <path
-              fill-rule="evenodd"
-              d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
-            />
-          </svg>
-        </button>
+            Exportar
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              style={{ marginLeft: 5 }}
+              fill="currentColor"
+              class="bi bi-filetype-txt"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
+              />
+            </svg>
+          </button>
+        )}
         {showDeleteAllButton && (
           <button
             type="button"
@@ -483,7 +492,7 @@ export default function Search() {
                   <tr>
                     <th scope="col">Tarefa</th>
                     <th scope="col">Descrição</th>
-                    <th scope="col">Data</th>
+                    <th scope="col">Data de conclusão</th>
                     <th scope="col">Ações</th>
                   </tr>
                 </thead>
