@@ -33,11 +33,16 @@ export default function Search() {
   const [novaTarefa, setNovaTarefa] = useState("");
   const [nomeTarefa, setNomeTarefa] = useState([]);
   const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
-  const [data, setData] = useState([]);
   const [novaData, setNovaData] = useState("");
-  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
+  const [novaDataConclusion, setNovaDataConclusion] = useState("");
+
+  const [dataStart, setDataStart] = useState([]);
+  const [dataConclusion, setDataConclusion] = useState([]);
+
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedCompletionDate, setSelectedCompletionDate] = useState(null);
+  const [selectedConclusionDate, setSelectedConclusionDate] = useState(null);
+
+  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
   const [showExportButton, setShowExportButton] = useState(false);
 
@@ -49,10 +54,18 @@ export default function Search() {
     ) {
       setTarefas([...tarefas, novaTarefa]);
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
-      setData([...data, selectedStartDate.toISOString().split("T")[0]]);
+      setDataStart([
+        ...dataStart,
+        selectedStartDate.toISOString().split("T")[0],
+      ]);
+      setDataConclusion([
+        ...dataStart,
+        selectedConclusionDate.toISOString().split("T")[0],
+      ]);
       setNovaTarefa("");
       setNovaNomeTarefa("");
       setSelectedStartDate(null);
+      setSelectedConclusionDate(null);
     } else {
       Swal.fire({
         title: "Erro!",
@@ -68,7 +81,8 @@ export default function Search() {
     setIndiceEdicaoTarefa(index);
     setNovaTarefa(tarefas[index]);
     setNovaNomeTarefa(nomeTarefa[index]);
-    setNovaData(data[index]);
+    setNovaData(dataStart[index]);
+    setNovaDataConclusion(dataConclusion[index]);
   };
 
   const salvarTarefaEditada = () => {
@@ -83,18 +97,24 @@ export default function Search() {
       const nomesTarefaAtualizados = [...nomeTarefa];
       nomesTarefaAtualizados[indiceEdicaoTarefa] = novaNomeTarefa;
 
-      const datasAtualizadas = [...data];
+      const datasAtualizadas = [...dataStart];
       datasAtualizadas[indiceEdicaoTarefa] = selectedStartDate
+        .toISOString()
+        .split("T")[0];
+      const datasConclusionAtualizadas = [...dataConclusion];
+      datasConclusionAtualizadas[indiceEdicaoTarefa] = selectedConclusionDate
         .toISOString()
         .split("T")[0];
 
       setTarefas(tarefasAtualizadas);
       setNomeTarefa(nomesTarefaAtualizados);
-      setData(datasAtualizadas);
+      setDataStart(datasAtualizadas);
+      setDataConclusion(datasConclusionAtualizadas);
 
       setNovaTarefa("");
       setNovaNomeTarefa("");
       setSelectedStartDate(null);
+      setSelectedConclusionDate(null);
       setIndiceEdicaoTarefa(null);
     } else {
       Swal.fire({
@@ -111,6 +131,10 @@ export default function Search() {
     setSelectedStartDate(date);
   };
 
+  const handleDateConclusionChange = (date) => {
+    setSelectedConclusionDate(date);
+  };
+
   const adicionarNomeTarefa = () => {
     if (novaNomeTarefa.trim() !== "") {
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
@@ -123,8 +147,12 @@ export default function Search() {
     setTarefas(tarefasAtualizadas);
     const nomesTarefaAtualizados = nomeTarefa.filter((_, i) => i !== index);
     setNomeTarefa(nomesTarefaAtualizados);
-    const datasAtualizadas = data.filter((_, i) => i !== index);
-    setData(datasAtualizadas);
+    const datasAtualizadas = dataStart.filter((_, i) => i !== index);
+    setDataStart(datasAtualizadas);
+    const datasConclusionAtualizadas = dataConclusion.filter(
+      (_, i) => i !== index
+    );
+    setDataConclusion(datasConclusionAtualizadas);
   };
 
   const excluirTodasAsTarefas = () => {
@@ -142,7 +170,8 @@ export default function Search() {
         // Limpar todas as tarefas
         setTarefas([]);
         setNomeTarefa([]);
-        setData([]);
+        setDataStart([]);
+        setDataConclusion([]);
         // Fechar o modal se estiver aberto
         setShowImportModal(false);
         Swal.fire({
@@ -190,7 +219,7 @@ export default function Search() {
 
     const conteudo = tarefas
       .map((tarefa, index) => {
-        return `${nomeTarefa[index]} - ${tarefa} - ${data[index]}\n`;
+        return `${nomeTarefa[index]} - ${tarefa} - ${dataStart[index]} - ${dataConclusion[index]}\n`;
       })
       .join("");
 
@@ -231,9 +260,9 @@ export default function Search() {
     if (importedTasks.trim() !== "") {
       const lines = importedTasks.split("\n");
       const importedTasksArray = lines.map((line) => {
-        const [nome, descricao, data] = line.split(" - ");
-        if (nome && descricao && data) {
-          return { nome, descricao, data };
+        const [nome, descricao, dataStart, dataConclusion] = line.split(" - ");
+        if (nome && descricao && dataStart && dataConclusion) {
+          return { nome, descricao, dataStart, dataConclusion };
         } else {
           return null;
         }
@@ -252,13 +281,18 @@ export default function Search() {
         ...validImportedTasksArray.map((task) => task.nome),
       ];
       const updatedDates = [
-        ...data,
-        ...validImportedTasksArray.map((task) => task.data),
+        ...dataStart,
+        ...validImportedTasksArray.map((task) => task.dataStart),
+      ];
+      const updatedDatesConclusion = [
+        ...dataConclusion,
+        ...validImportedTasksArray.map((task) => task.dataConclusion),
       ];
 
       setTarefas(updatedTasks);
       setNomeTarefa(updatedNames);
-      setData(updatedDates);
+      setDataStart(updatedDates);
+      setDataConclusion(updatedDatesConclusion);
 
       setImportedTasks("");
     }
@@ -443,6 +477,16 @@ export default function Search() {
                   selected={selectedStartDate}
                   onChange={handleDateStartChange}
                   dateFormat="dd/MM/yyyy"
+                  placeholderText="Data de inicio"
+                  className="form-control"
+                  isClearable
+                />
+                <br />
+                <br />
+                <DatePicker
+                  selected={selectedConclusionDate}
+                  onChange={handleDateConclusionChange}
+                  dateFormat="dd/MM/yyyy"
                   placeholderText="Data de conclusão"
                   className="form-control"
                   isClearable
@@ -486,6 +530,7 @@ export default function Search() {
                   <tr>
                     <th scope="col">Tarefa</th>
                     <th scope="col">Descrição</th>
+                    <th scope="col">Data de inicio</th>
                     <th scope="col">Data de conclusão</th>
                     <th scope="col">Ações</th>
                   </tr>
@@ -494,7 +539,8 @@ export default function Search() {
                   <tr className="bg-dark">
                     <th scope="row">{nomeTarefa[index]}</th>
                     <td>{tarefa}</td>
-                    <td>{data[index]}</td>
+                    <td>{dataStart[index]}</td>
+                    <td>{dataConclusion[index]}</td>
                     <td>
                       <button
                         href="#"
@@ -585,7 +631,17 @@ export default function Search() {
                           selected={selectedStartDate}
                           onChange={handleDateStartChange}
                           dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de conclusão"
+                          placeholderText="Data de inicio"
+                          className="form-control"
+                          isClearable
+                        />
+                        <br />
+                        <br />
+                        <DatePicker
+                          selected={selectedConclusionDate}
+                          onChange={handleDateConclusionChange}
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="Data de inicio"
                           className="form-control"
                           isClearable
                         />
