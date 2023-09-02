@@ -5,3 +5,15 @@ a{text-decoration: none;}
 .colorPrimary{
     background-color: #fff;
 }
+
+.Table{ background-color: aqua;}
+
+/* Estilos para o tema escuro */
+.dark-mode {
+  background-color: #000;
+  color: #fff;
+}
+
+.dark-mode h1 {
+  color: #fff;
+}
