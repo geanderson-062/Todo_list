@@ -135,16 +135,6 @@ export default function Search() {
     setData(datasAtualizadas);
   };
 
-  const alertaInformacao = () => {
-    Swal.fire({
-      title: "Sistema de Lista de Tarefas Simples",
-      text: "Imagine um aplicativo que ajuda você a lembrar o que precisa fazer. Você escreve o que quer fazer e adiciona na lista. Se esquecer de escrever, ele avisa. As coisas que escreve aparecem na lista. Se terminar uma tarefa, pode tirar da lista. É como um lembrete para suas tarefas.",
-      icon: "info",
-      confirmButtonText: "Ok",
-      confirmButtonColor: "#0D6EFD",
-    });
-  };
-
   useEffect(() => {
     ScrollReveal().reveal(".scroll-reveal", {
       duration: 1000,
@@ -393,43 +383,25 @@ export default function Search() {
                   placeholder="Digite a data de conclusão"
                 />
               </div>
-              <div className="d-grid gap-2 col-6 mx-auto">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={() => {
-                    adicionarTarefa();
-                    adicionarNomeTarefa();
-                    adicionarData();
-                  }}
-                >
-                  Adicionar
-                </button>
-              </div>
             </div>
             <div className="modal-footer">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => {
+                  adicionarTarefa();
+                  adicionarNomeTarefa();
+                  adicionarData();
+                }}
+              >
+                Adicionar
+              </button>
               <button
                 type="button"
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
               >
                 Cancelar
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={alertaInformacao}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  className="bi bi-info"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897+.105 1.319+.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-                </svg>
               </button>
             </div>
           </div>
