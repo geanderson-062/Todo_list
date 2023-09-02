@@ -1,7 +1,9 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { useEffect } from "react";
 import ScrollReveal from "scrollreveal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -29,22 +31,25 @@ export default function Search() {
   const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
 
   const [data, setData] = useState([]);
+
   const [novaData, setNovaData] = useState("");
 
   const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
+
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const adicionarTarefa = () => {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      novaData.trim() !== ""
+      selectedDate !== null
     ) {
       setTarefas([...tarefas, novaTarefa]);
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
-      setData([...data, novaData]);
+      setData([...data, selectedDate.toISOString().split("T")[0]]);
       setNovaTarefa("");
       setNovaNomeTarefa("");
-      setNovaData("");
+      setSelectedDate(null);
     } else {
       Swal.fire({
         title: "Erro!",
@@ -67,7 +72,7 @@ export default function Search() {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      novaData.trim() !== ""
+      selectedDate !== null
     ) {
       const tarefasAtualizadas = [...tarefas];
       tarefasAtualizadas[indiceEdicaoTarefa] = novaTarefa;
@@ -76,7 +81,9 @@ export default function Search() {
       nomesTarefaAtualizados[indiceEdicaoTarefa] = novaNomeTarefa;
 
       const datasAtualizadas = [...data];
-      datasAtualizadas[indiceEdicaoTarefa] = novaData;
+      datasAtualizadas[indiceEdicaoTarefa] = selectedDate
+        .toISOString()
+        .split("T")[0];
 
       setTarefas(tarefasAtualizadas);
       setNomeTarefa(nomesTarefaAtualizados);
@@ -84,7 +91,7 @@ export default function Search() {
 
       setNovaTarefa("");
       setNovaNomeTarefa("");
-      setNovaData("");
+      setSelectedDate(null);
       setIndiceEdicaoTarefa(null);
     } else {
       Swal.fire({
@@ -97,26 +104,8 @@ export default function Search() {
     }
   };
 
-  const handleDateChange = (e) => {
-    const value = e.target.value;
-    if (/^[0-9]*$/.test(value) || value === "") {
-      setNovaData(value);
-    } else {
-      Swal.fire({
-        title: "Erro!",
-        text: "A data deve conter apenas números.",
-        icon: "error",
-        confirmButtonText: "Ok",
-        confirmButtonColor: "#0D6EFD",
-      });
-    }
-  };
-
-  const adicionarData = () => {
-    if (novaData.trim() !== "") {
-      setData([...data, novaData]);
-      setNovaData("");
-    }
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   const adicionarNomeTarefa = () => {
@@ -147,7 +136,6 @@ export default function Search() {
 
   // Função para exportar a lista de tarefas em um arquivo de texto
   const exportarListaTarefas = () => {
-    // Verifica se a lista de tarefas está vazia
     if (tarefas.length === 0) {
       Swal.fire({
         title: "Lista Vazia",
@@ -159,36 +147,24 @@ export default function Search() {
       return;
     }
 
-    // Cria o conteúdo do arquivo de texto
     const conteudo = tarefas
       .map((tarefa, index) => {
         return `${nomeTarefa[index]} - ${tarefa} - ${data[index]}\n`;
       })
       .join("");
 
-    // Cria um objeto Blob com o conteúdo do arquivo de texto
     const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
-
-    // Cria um objeto URL para o Blob
     const url = window.URL.createObjectURL(blob);
-
-    // Cria um elemento de âncora para fazer o download do arquivo
     const a = document.createElement("a");
     a.href = url;
     a.download = "lista_de_tarefas.txt";
-
-    // Clica automaticamente no link de download
     a.click();
-
-    // Libera o objeto URL
     window.URL.revokeObjectURL(url);
   };
 
-  const [importedTasks, setImportedTasks] = useState(""); // Estado para armazenar o conteúdo do arquivo importado
+  const [importedTasks, setImportedTasks] = useState("");
+  const [showImportModal, setShowImportModal] = useState(false);
 
-  const [showImportModal, setShowImportModal] = useState(false); // Estado para controlar a exibição do modal de importação
-
-  // Função para importar tarefas a partir de um arquivo de texto
   const importarTarefas = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -201,7 +177,7 @@ export default function Search() {
         reader.onload = (e) => {
           const content = e.target.result;
           setImportedTasks(content);
-          setShowImportModal(true); // Exibe o modal após importar o arquivo
+          setShowImportModal(true);
         };
         reader.readAsText(file);
       }
@@ -215,17 +191,13 @@ export default function Search() {
       const lines = importedTasks.split("\n");
       const importedTasksArray = lines.map((line) => {
         const [nome, descricao, data] = line.split(" - ");
-        // Verifique se todos os campos são preenchidos e se o formato está correto
         if (nome && descricao && data) {
           return { nome, descricao, data };
         } else {
-          // Trate os casos em que o formato não está correto
-          // Você pode mostrar uma mensagem de erro ou lidar com isso de outra forma
           return null;
         }
       });
 
-      // Filtrar os itens nulos (caso o formato não esteja correto)
       const validImportedTasksArray = importedTasksArray.filter(
         (task) => task !== null
       );
@@ -247,7 +219,7 @@ export default function Search() {
       setNomeTarefa(updatedNames);
       setData(updatedDates);
 
-      setImportedTasks(""); // Limpa o conteúdo importado
+      setImportedTasks("");
     }
   };
 
@@ -262,6 +234,20 @@ export default function Search() {
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
           Nova tarefa
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            style={{ marginLeft: 5 }}
+            fill="currentColor"
+            class="bi bi-plus-lg"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+            />
+          </svg>
         </button>
         <button
           type="button"
@@ -270,6 +256,17 @@ export default function Search() {
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
           Importar
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            style={{ marginLeft: 5 }}
+            fill="currentColor"
+            class="bi bi-cloud-arrow-up-fill"
+            viewBox="0 0 16 16"
+          >
+            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+          </svg>
         </button>
         <button
           type="button"
@@ -278,6 +275,20 @@ export default function Search() {
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
           Exportar
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            style={{ marginLeft: 5 }}
+            fill="currentColor"
+            class="bi bi-filetype-txt"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
+            />
+          </svg>
         </button>
       </div>
 
@@ -375,12 +386,13 @@ export default function Search() {
                   placeholder="Digite uma descrição"
                 />
                 <br />
-                <input
-                  type="text"
-                  value={novaData}
+                <DatePicker
+                  selected={selectedDate}
                   onChange={handleDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Data de conclusão"
                   className="form-control"
-                  placeholder="Digite a data de conclusão"
+                  isClearable
                 />
               </div>
             </div>
@@ -391,7 +403,6 @@ export default function Search() {
                 onClick={() => {
                   adicionarTarefa();
                   adicionarNomeTarefa();
-                  adicionarData();
                 }}
               >
                 Adicionar
@@ -454,11 +465,10 @@ export default function Search() {
                       </button>
                       <button
                         href="#"
+                        style={{ marginRight: 5 }}
                         className="btn btn-danger"
-                        title="Deletar Tarefa"
-                        onClick={() => {
-                          confirmarRemocaoTarefa(index);
-                        }}
+                        onClick={() => confirmarRemocaoTarefa(index)}
+                        title="Excluir Tarefa"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -475,6 +485,7 @@ export default function Search() {
                   </tr>
                 </tbody>
               </table>
+
               {/* Modal de Edição */}
               <div
                 className="modal fade"
@@ -517,29 +528,32 @@ export default function Search() {
                           placeholder="Digite uma descrição"
                         />
                         <br />
-                        <input
-                          type="text"
-                          value={novaData}
+                        <DatePicker
+                          selected={selectedDate}
                           onChange={handleDateChange}
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="Data de conclusão"
                           className="form-control"
-                          placeholder="Digite a data de conclusão"
+                          isClearable
                         />
                       </div>
                     </div>
                     <div className="modal-footer">
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={() => {
+                          salvarTarefaEditada();
+                        }}
+                      >
+                        Salvar
+                      </button>
                       <button
                         type="button"
                         className="btn btn-danger"
                         data-bs-dismiss="modal"
                       >
                         Cancelar
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => salvarTarefaEditada(index)}
-                      >
-                        Salvar
                       </button>
                     </div>
                   </div>
