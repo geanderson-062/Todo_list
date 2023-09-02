@@ -478,7 +478,7 @@ export default function Search() {
           tarefas.map((tarefa, index) => (
             <div key={index}>
               <br />
-              <table className="table table-secondary table-hover">
+              <table className="table table-secondary table-bordered table-hover">
                 <thead>
                   <tr>
                     <th scope="col">Tarefa</th>

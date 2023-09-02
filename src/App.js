@@ -9,6 +9,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import Navbar from "./Components/Navbar";
 import Tasklist from "./Components/Tasklist";
 import Animation from "./Components/Animation";
+import Footer from "./Components/Footer";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -27,10 +28,9 @@ function App() {
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button
           style={{
-            marginTop: 20,
             maxWidth: 50,
             maxHeight: 50,
-            marginLeft: 30,
+            marginLeft: "5%",
           }}
           onClick={toggleDarkMode}
           class="btn btn-primary me-md-2"
@@ -41,6 +41,7 @@ function App() {
       </div>
       <Animation />
       <Tasklist />
+      <Footer />
     </div>
   );
 }
