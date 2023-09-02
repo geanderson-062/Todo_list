@@ -31,34 +31,28 @@ export default function Search() {
 
   const [tarefas, setTarefas] = useState([]);
   const [novaTarefa, setNovaTarefa] = useState("");
-
   const [nomeTarefa, setNomeTarefa] = useState([]);
   const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
-
   const [data, setData] = useState([]);
-
   const [novaData, setNovaData] = useState("");
-
   const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
-
-  const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedCompletionDate, setSelectedCompletionDate] = useState(null);
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
-
   const [showExportButton, setShowExportButton] = useState(false);
 
   const adicionarTarefa = () => {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedDate !== null
+      selectedStartDate !== null
     ) {
       setTarefas([...tarefas, novaTarefa]);
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
-      setData([...data, selectedDate.toISOString().split("T")[0]]);
+      setData([...data, selectedStartDate.toISOString().split("T")[0]]);
       setNovaTarefa("");
       setNovaNomeTarefa("");
-      setSelectedDate(null);
+      setSelectedStartDate(null);
     } else {
       Swal.fire({
         title: "Erro!",
@@ -81,7 +75,7 @@ export default function Search() {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedDate !== null
+      selectedStartDate !== null
     ) {
       const tarefasAtualizadas = [...tarefas];
       tarefasAtualizadas[indiceEdicaoTarefa] = novaTarefa;
@@ -90,7 +84,7 @@ export default function Search() {
       nomesTarefaAtualizados[indiceEdicaoTarefa] = novaNomeTarefa;
 
       const datasAtualizadas = [...data];
-      datasAtualizadas[indiceEdicaoTarefa] = selectedDate
+      datasAtualizadas[indiceEdicaoTarefa] = selectedStartDate
         .toISOString()
         .split("T")[0];
 
@@ -100,7 +94,7 @@ export default function Search() {
 
       setNovaTarefa("");
       setNovaNomeTarefa("");
-      setSelectedDate(null);
+      setSelectedStartDate(null);
       setIndiceEdicaoTarefa(null);
     } else {
       Swal.fire({
@@ -113,8 +107,8 @@ export default function Search() {
     }
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateStartChange = (date) => {
+    setSelectedStartDate(date);
   };
 
   const adicionarNomeTarefa = () => {
@@ -446,8 +440,8 @@ export default function Search() {
                 />
                 <br />
                 <DatePicker
-                  selected={selectedDate}
-                  onChange={handleDateChange}
+                  selected={selectedStartDate}
+                  onChange={handleDateStartChange}
                   dateFormat="dd/MM/yyyy"
                   placeholderText="Data de conclusão"
                   className="form-control"
@@ -588,8 +582,8 @@ export default function Search() {
                         />
                         <br />
                         <DatePicker
-                          selected={selectedDate}
-                          onChange={handleDateChange}
+                          selected={selectedStartDate}
+                          onChange={handleDateStartChange}
                           dateFormat="dd/MM/yyyy"
                           placeholderText="Data de conclusão"
                           className="form-control"
