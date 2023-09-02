@@ -532,8 +532,7 @@ export default function Search() {
               <table className="table table-secondary table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Tarefa</th>
-                    <th scope="col">Ações</th>
+                    <th scope="col">Tarefas</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -548,11 +547,9 @@ export default function Search() {
                       >
                         {nomeTarefa[index]}
                       </button>
-                    </td>
-                    <td>
                       <button
                         href="#"
-                        style={{ marginRight: 5 }}
+                        style={{ marginLeft: 5, marginRight: 5 }}
                         className="btn btn-success"
                         data-bs-toggle="modal"
                         data-bs-target={`#editModal${index}`}
