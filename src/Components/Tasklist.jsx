@@ -33,26 +33,38 @@ export default function Search() {
   const [novaTarefa, setNovaTarefa] = useState("");
   const [nomeTarefa, setNomeTarefa] = useState([]);
   const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
-  const [data, setData] = useState([]);
   const [novaData, setNovaData] = useState("");
-  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
+  const [novaDataConclusion, setNovaDataConclusion] = useState("");
+  const [dataStart, setDataStart] = useState([]);
+  const [dataConclusion, setDataConclusion] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedCompletionDate, setSelectedCompletionDate] = useState(null);
+  const [selectedConclusionDate, setSelectedConclusionDate] = useState(null);
+  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
   const [showExportButton, setShowExportButton] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
   const adicionarTarefa = () => {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedStartDate !== null
+      selectedStartDate !== null &&
+      selectedConclusionDate !== null
     ) {
       setTarefas([...tarefas, novaTarefa]);
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
-      setData([...data, selectedStartDate.toISOString().split("T")[0]]);
+      setDataStart([
+        ...dataStart,
+        selectedStartDate.toISOString().split("T")[0],
+      ]);
+      setDataConclusion([
+        ...dataStart,
+        selectedConclusionDate.toISOString().split("T")[0],
+      ]);
       setNovaTarefa("");
       setNovaNomeTarefa("");
       setSelectedStartDate(null);
+      setSelectedConclusionDate(null);
     } else {
       Swal.fire({
         title: "Erro!",
@@ -68,14 +80,16 @@ export default function Search() {
     setIndiceEdicaoTarefa(index);
     setNovaTarefa(tarefas[index]);
     setNovaNomeTarefa(nomeTarefa[index]);
-    setNovaData(data[index]);
+    setNovaData(dataStart[index]);
+    setNovaDataConclusion(dataConclusion[index]);
   };
 
   const salvarTarefaEditada = () => {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedStartDate !== null
+      selectedStartDate !== null &&
+      selectedConclusionDate !== null
     ) {
       const tarefasAtualizadas = [...tarefas];
       tarefasAtualizadas[indiceEdicaoTarefa] = novaTarefa;
@@ -83,18 +97,24 @@ export default function Search() {
       const nomesTarefaAtualizados = [...nomeTarefa];
       nomesTarefaAtualizados[indiceEdicaoTarefa] = novaNomeTarefa;
 
-      const datasAtualizadas = [...data];
+      const datasAtualizadas = [...dataStart];
       datasAtualizadas[indiceEdicaoTarefa] = selectedStartDate
+        .toISOString()
+        .split("T")[0];
+      const datasConclusionAtualizadas = [...dataConclusion];
+      datasConclusionAtualizadas[indiceEdicaoTarefa] = selectedConclusionDate
         .toISOString()
         .split("T")[0];
 
       setTarefas(tarefasAtualizadas);
       setNomeTarefa(nomesTarefaAtualizados);
-      setData(datasAtualizadas);
+      setDataStart(datasAtualizadas);
+      setDataConclusion(datasConclusionAtualizadas);
 
       setNovaTarefa("");
       setNovaNomeTarefa("");
       setSelectedStartDate(null);
+      setSelectedConclusionDate(null);
       setIndiceEdicaoTarefa(null);
     } else {
       Swal.fire({
@@ -107,8 +127,16 @@ export default function Search() {
     }
   };
 
+  const abrirModalTarefa = () => {
+    setShowTaskModal(true);
+  };
+
   const handleDateStartChange = (date) => {
     setSelectedStartDate(date);
+  };
+
+  const handleDateConclusionChange = (date) => {
+    setSelectedConclusionDate(date);
   };
 
   const adicionarNomeTarefa = () => {
@@ -123,8 +151,12 @@ export default function Search() {
     setTarefas(tarefasAtualizadas);
     const nomesTarefaAtualizados = nomeTarefa.filter((_, i) => i !== index);
     setNomeTarefa(nomesTarefaAtualizados);
-    const datasAtualizadas = data.filter((_, i) => i !== index);
-    setData(datasAtualizadas);
+    const datasAtualizadas = dataStart.filter((_, i) => i !== index);
+    setDataStart(datasAtualizadas);
+    const datasConclusionAtualizadas = dataConclusion.filter(
+      (_, i) => i !== index
+    );
+    setDataConclusion(datasConclusionAtualizadas);
   };
 
   const excluirTodasAsTarefas = () => {
@@ -142,7 +174,8 @@ export default function Search() {
         // Limpar todas as tarefas
         setTarefas([]);
         setNomeTarefa([]);
-        setData([]);
+        setDataStart([]);
+        setDataConclusion([]);
         // Fechar o modal se estiver aberto
         setShowImportModal(false);
         Swal.fire({
@@ -190,7 +223,7 @@ export default function Search() {
 
     const conteudo = tarefas
       .map((tarefa, index) => {
-        return `${nomeTarefa[index]} - ${tarefa} - ${data[index]}\n`;
+        return `${nomeTarefa[index]} - ${tarefa} - ${dataStart[index]} - ${dataConclusion[index]}\n`;
       })
       .join("");
 
@@ -231,9 +264,9 @@ export default function Search() {
     if (importedTasks.trim() !== "") {
       const lines = importedTasks.split("\n");
       const importedTasksArray = lines.map((line) => {
-        const [nome, descricao, data] = line.split(" - ");
-        if (nome && descricao && data) {
-          return { nome, descricao, data };
+        const [nome, descricao, dataStart, dataConclusion] = line.split(" - ");
+        if (nome && descricao && dataStart && dataConclusion) {
+          return { nome, descricao, dataStart, dataConclusion };
         } else {
           return null;
         }
@@ -252,13 +285,18 @@ export default function Search() {
         ...validImportedTasksArray.map((task) => task.nome),
       ];
       const updatedDates = [
-        ...data,
-        ...validImportedTasksArray.map((task) => task.data),
+        ...dataStart,
+        ...validImportedTasksArray.map((task) => task.dataStart),
+      ];
+      const updatedDatesConclusion = [
+        ...dataConclusion,
+        ...validImportedTasksArray.map((task) => task.dataConclusion),
       ];
 
       setTarefas(updatedTasks);
       setNomeTarefa(updatedNames);
-      setData(updatedDates);
+      setDataStart(updatedDates);
+      setDataConclusion(updatedDatesConclusion);
 
       setImportedTasks("");
     }
@@ -443,6 +481,16 @@ export default function Search() {
                   selected={selectedStartDate}
                   onChange={handleDateStartChange}
                   dateFormat="dd/MM/yyyy"
+                  placeholderText="Data de inicio"
+                  className="form-control"
+                  isClearable
+                />
+                <br />
+                <br />
+                <DatePicker
+                  selected={selectedConclusionDate}
+                  onChange={handleDateConclusionChange}
+                  dateFormat="dd/MM/yyyy"
                   placeholderText="Data de conclusão"
                   className="form-control"
                   isClearable
@@ -484,21 +532,24 @@ export default function Search() {
               <table className="table table-secondary table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Tarefa</th>
-                    <th scope="col">Descrição</th>
-                    <th scope="col">Data de conclusão</th>
-                    <th scope="col">Ações</th>
+                    <th scope="col">Tarefas</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="bg-dark">
-                    <th scope="row">{nomeTarefa[index]}</th>
-                    <td>{tarefa}</td>
-                    <td>{data[index]}</td>
                     <td>
                       <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#TaskModal${index}`}
+                        onClick={() => abrirModalTarefa()}
+                      >
+                        {nomeTarefa[index]}
+                      </button>
+                      <button
                         href="#"
-                        style={{ marginRight: 5 }}
+                        style={{ marginLeft: 5, marginRight: 5 }}
                         className="btn btn-success"
                         data-bs-toggle="modal"
                         data-bs-target={`#editModal${index}`}
@@ -538,6 +589,111 @@ export default function Search() {
                   </tr>
                 </tbody>
               </table>
+
+              {/* Modal da tarefa */}
+              <div
+                className={`modal fade ${
+                  showTaskModal === index ? "show" : ""
+                }`}
+                style={{ display: showTaskModal === index ? "block" : "none" }}
+                id={`TaskModal${index}`} // Use o índice para tornar o ID único
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabIndex="-1"
+                aria-labelledby={`staticBackdropLabel${index}`} // Use o índice para tornar o ID único
+                aria-hidden={showTaskModal !== index}
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        {nomeTarefa[index]}
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <table className="table table-secondary table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Descrição</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="bg-dark">
+                            <td>{tarefa}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table className="table table-secondary table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Data de inicio</th>
+                            <th scope="col">Data de Conclusão</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="bg-dark">
+                            <td>{dataStart[index]}</td>
+                            <td>{dataConclusion[index]}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
+                      >
+                        Ok
+                      </button>
+                      <button
+                        href="#"
+                        style={{ marginRight: 5 }}
+                        className="btn btn-success"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#editModal${index}`}
+                        onClick={() => editarTarefa(index)}
+                        title="Editar Tarefa"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          className="bi bi-pencil-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                        </svg>
+                      </button>
+                      <button
+                        href="#"
+                        style={{ marginRight: 5 }}
+                        className="btn btn-danger"
+                        onClick={() => confirmarRemocaoTarefa(index)}
+                        title="Excluir Tarefa"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          className="bi bi-trash-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Modal de Edição */}
               <div
@@ -585,7 +741,17 @@ export default function Search() {
                           selected={selectedStartDate}
                           onChange={handleDateStartChange}
                           dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de conclusão"
+                          placeholderText="Data de inicio"
+                          className="form-control"
+                          isClearable
+                        />
+                        <br />
+                        <br />
+                        <DatePicker
+                          selected={selectedConclusionDate}
+                          onChange={handleDateConclusionChange}
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText="Data de inicio"
                           className="form-control"
                           isClearable
                         />
