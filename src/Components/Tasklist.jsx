@@ -38,6 +38,8 @@ export default function Search() {
 
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
+
   const adicionarTarefa = () => {
     if (
       novaTarefa.trim() !== "" &&
@@ -123,6 +125,38 @@ export default function Search() {
     const datasAtualizadas = data.filter((_, i) => i !== index);
     setData(datasAtualizadas);
   };
+
+  const excluirTodasAsTarefas = () => {
+    Swal.fire({
+      title: "Confirmação",
+      text: "Tem certeza de que deseja excluir todas as tarefas?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: "#DC3545",
+      confirmButtonColor: "#0D6EFD",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Limpar todas as tarefas
+        setTarefas([]);
+        setNomeTarefa([]);
+        setData([]);
+        // Fechar o modal se estiver aberto
+        setShowImportModal(false);
+        Swal.fire(
+          "Excluídas!",
+          "Todas as tarefas foram excluídas com sucesso.",
+          "success"
+        );
+      }
+    });
+  };
+
+  useEffect(() => {
+    // Verifique se há mais de uma tarefa para mostrar o botão "Excluir Todas as Tarefas"
+    setShowDeleteAllButton(tarefas.length > 1);
+  }, [tarefas]);
 
   useEffect(() => {
     ScrollReveal().reveal(".scroll-reveal", {
@@ -290,6 +324,16 @@ export default function Search() {
             />
           </svg>
         </button>
+        {showDeleteAllButton && (
+          <button
+            type="button"
+            className="btn btn-danger"
+            style={{ marginLeft: "20%", marginRight: "20%" }}
+            onClick={excluirTodasAsTarefas}
+          >
+            Excluir Todas as Tarefas
+          </button>
+        )}
       </div>
 
       <br />
