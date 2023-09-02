@@ -35,13 +35,10 @@ export default function Search() {
   const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
   const [novaData, setNovaData] = useState("");
   const [novaDataConclusion, setNovaDataConclusion] = useState("");
-
   const [dataStart, setDataStart] = useState([]);
   const [dataConclusion, setDataConclusion] = useState([]);
-
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedConclusionDate, setSelectedConclusionDate] = useState(null);
-
   const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
   const [showExportButton, setShowExportButton] = useState(false);
@@ -50,7 +47,8 @@ export default function Search() {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedStartDate !== null
+      selectedStartDate !== null &&
+      selectedConclusionDate !== null
     ) {
       setTarefas([...tarefas, novaTarefa]);
       setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
@@ -89,7 +87,8 @@ export default function Search() {
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
-      selectedStartDate !== null
+      selectedStartDate !== null &&
+      selectedConclusionDate !== null
     ) {
       const tarefasAtualizadas = [...tarefas];
       tarefasAtualizadas[indiceEdicaoTarefa] = novaTarefa;
