@@ -19,7 +19,12 @@ export default function Search() {
     }).then((result) => {
       if (result.isConfirmed) {
         removerTarefa(index);
-        Swal.fire("Excluído!", "A tarefa foi excluída com sucesso.", "success");
+        Swal.fire({
+          title: "Excluído!",
+          text: "A tarefa foi excluída com sucesso.",
+          icon: "success",
+          confirmButtonColor: "#0D6EFD",
+        });
       }
     });
   };
@@ -144,11 +149,12 @@ export default function Search() {
         setData([]);
         // Fechar o modal se estiver aberto
         setShowImportModal(false);
-        Swal.fire(
-          "Excluídas!",
-          "Todas as tarefas foram excluídas com sucesso.",
-          "success"
-        );
+        Swal.fire({
+          confirmButtonColor: "#0D6EFD",
+          title: "Excluídas!",
+          text: "Todas as tarefas foram excluídas com sucesso.",
+          icon: "success",
+        });
       }
     });
   };
