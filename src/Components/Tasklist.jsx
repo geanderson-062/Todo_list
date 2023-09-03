@@ -532,7 +532,7 @@ export default function Search() {
               <table className="table table-secondary table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Tarefas</th>
+                    <th scope="col">Tarefa #{index + 1}</th>
                   </tr>
                 </thead>
                 <tbody>
