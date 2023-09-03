@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -215,7 +217,7 @@ export default function Search() {
   }, []);
 
   // Função para exportar a lista de tarefas em um arquivo de texto
-  const exportarListaTarefas = () => {
+  const exportarListaTarefasTXT = () => {
     if (tarefas.length === 0) {
       Swal.fire({
         title: "Lista Vazia",
@@ -238,6 +240,77 @@ export default function Search() {
     const a = document.createElement("a");
     a.href = url;
     a.download = "lista_de_tarefas.txt";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportarListaTarefasCSV = () => {
+    if (tarefas.length === 0) {
+      Swal.fire({
+        title: "Lista Vazia",
+        text: "A lista de tarefas está vazia. Não há nada para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+      return;
+    }
+
+    // Cabeçalho do CSV
+    const csvHeader =
+      "Nome da Tarefa,Descrição,Data de Início,Data de Conclusão\n";
+
+    // Linhas do CSV
+    const csvContent = tarefas
+      .map((tarefa, index) => {
+        return `${nomeTarefa[index]},${tarefa},${dataStart[index]},${dataConclusion[index]}\n`;
+      })
+      .join("");
+
+    // Combinar cabeçalho e conteúdo em um único CSV
+    const conteudo = csvHeader + csvContent;
+
+    const blob = new Blob([conteudo], { type: "text/csv;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lista_de_tarefas.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportarListaTarefasJSON = () => {
+    if (tarefas.length === 0) {
+      Swal.fire({
+        title: "Lista Vazia",
+        text: "A lista de tarefas está vazia. Não há nada para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+      return;
+    }
+
+    // Criar um objeto JSON com os dados das tarefas
+    const tarefasJSON = tarefas.map((tarefa, index) => {
+      return {
+        NomeTarefa: nomeTarefa[index],
+        Descricao: tarefa,
+        DataInicio: dataStart[index],
+        DataConclusao: dataConclusion[index],
+      };
+    });
+
+    // Converter o objeto JSON em uma string JSON formatada
+    const conteudo = JSON.stringify(tarefasJSON, null, 2);
+
+    const blob = new Blob([conteudo], {
+      type: "application/json;charset=utf-8",
+    });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lista_de_tarefas.json";
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -361,7 +434,8 @@ export default function Search() {
           <button
             type="button"
             className="btn btn-success"
-            onClick={exportarListaTarefas}
+            data-bs-toggle="modal"
+            data-bs-target="#Exportar"
             style={{ marginLeft: "20%", marginRight: "20%" }}
           >
             Exportar
@@ -399,6 +473,112 @@ export default function Search() {
       )}
 
       <br />
+      {/* Modal para exportar arquivos  */}
+      <div
+        className="modal fade"
+        id="Exportar"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Escolha o formarto do arquivo
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div
+                className="d-grid gap-2 col-6 mx-auto"
+                style={{ marginTop: 50 }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasTXT}
+                >
+                  Exportar Txt
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    style={{ marginLeft: 5 }}
+                    fill="currentColor"
+                    class="bi bi-filetype-txt"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
+                    />
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasCSV}
+                >
+                  Exportar CSV
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    style={{ marginLeft: 5 }}
+                    fill="currentColor"
+                    class="bi bi-filetype-txt"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
+                    />
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasJSON}
+                >
+                  Exportar JSON
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    style={{ marginLeft: 5 }}
+                    fill="currentColor"
+                    class="bi bi-filetype-txt"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Modal para visualizar e adicionar tarefas importadas */}
       <div
         className={`modal fade ${showImportModal ? "show" : ""}`}
