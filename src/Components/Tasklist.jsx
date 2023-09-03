@@ -43,6 +43,7 @@ export default function Search() {
   const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
   const [showExportButton, setShowExportButton] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTaskCont, setShowTaskCont] = useState(false);
 
   const adicionarTarefa = () => {
     if (
@@ -199,6 +200,11 @@ export default function Search() {
   }, [tarefas]);
 
   useEffect(() => {
+    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
+    setShowTaskCont(tarefas.length > 0);
+  }, [tarefas]);
+
+  useEffect(() => {
     ScrollReveal().reveal(".scroll-reveal", {
       duration: 1000,
       distance: "20px",
@@ -302,6 +308,10 @@ export default function Search() {
     }
   };
 
+  const contarTarefas = () => {
+    return tarefas.length;
+  };
+
   return (
     <div className="container">
       <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
@@ -382,6 +392,11 @@ export default function Search() {
           </button>
         )}
       </div>
+      {showTaskCont && (
+        <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
+          Total de Tarefas ativas: {contarTarefas()}
+        </h4>
+      )}
 
       <br />
       {/* Modal para visualizar e adicionar tarefas importadas */}
