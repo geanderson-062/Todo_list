@@ -532,7 +532,7 @@ export default function Search() {
               <table className="table table-secondary table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Tarefas</th>
+                    <th scope="col">Tarefa #{index + 1}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -751,7 +751,7 @@ export default function Search() {
                           selected={selectedConclusionDate}
                           onChange={handleDateConclusionChange}
                           dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de inicio"
+                          placeholderText="Data de conclusão"
                           className="form-control"
                           isClearable
                         />
