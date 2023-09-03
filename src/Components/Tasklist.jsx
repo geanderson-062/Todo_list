@@ -4,8 +4,6 @@ import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
