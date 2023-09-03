@@ -751,7 +751,7 @@ export default function Search() {
                           selected={selectedConclusionDate}
                           onChange={handleDateConclusionChange}
                           dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de inicio"
+                          placeholderText="Data de conclusão"
                           className="form-control"
                           isClearable
                         />
