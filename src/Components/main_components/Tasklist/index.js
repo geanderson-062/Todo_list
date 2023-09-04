@@ -6,24 +6,24 @@ import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
-import "../styles/index.css";
+import "../../../styles/index.css";
 //icon component
-import Iconedit from "./Icons/Icon_edit";
-import Icondelete from "./Icons/Icon_delete";
-import Iconimport from "./Icons/Icon_import";
-import Iconexport from "./Icons/Icon_export";
-import Iconadd from "./Icons/Icon_add";
-import Icontxt from "./Icons/Icon_txt";
-import Iconcsv from "./Icons/Icon_csv";
-import Iconjson from "./Icons/Icon_json";
+import Iconedit from "../../Icons/Icon_edit";
+import Icondelete from "../../Icons/Icon_delete";
+import Iconimport from "../../Icons/Icon_import";
+import Iconexport from "../../Icons/Icon_export";
+import Iconadd from "../../Icons/Icon_add";
+import Icontxt from "../../Icons/Icon_txt";
+import Iconcsv from "../../Icons/Icon_csv";
+import Iconjson from "../../Icons/Icon_json";
 //table component
-import Tableheaddate from "./Tables/Table_head_date/index";
-import Tableheaddescription from "./Tables/Table_head_description";
+import Tableheaddate from "../../Tables/Table_head_date/index";
+import Tableheaddescription from "../../Tables/Table_head_description";
 //title compoenent
-import Titlemodalfileexport from "./Titles/Title_modal_file_export";
-import Titlemodalfileviewimport from "./Titles/Title_modal_file_view_import";
-import Titlemodalnewtask from "./Titles/Title_modal_new_task";
-import Titleinfotasks from "./Titles/Title_info_tasks";
+import Titlemodalfileexport from "../../Titles/Title_modal_file_export";
+import Titlemodalfileviewimport from "../../Titles/Title_modal_file_view_import";
+import Titlemodalnewtask from "../../Titles/Title_modal_new_task";
+import Titleinfotasks from "../../Titles/Title_info_tasks";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {

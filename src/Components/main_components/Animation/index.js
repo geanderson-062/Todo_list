@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import animationData from "../Animation/animation_llv7ymgd.json";
+import animationData from "../../../Animation/animation_llv7ymgd.json";
 
 import { useEffect } from "react";
 import ScrollReveal from "scrollreveal";
