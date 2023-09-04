@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../styles/index.css";
 //icon component
 import Iconedit from "./Icon_edit";
 import Icondelete from "./Icon_delete";
@@ -410,50 +411,51 @@ export default function Search() {
 
   return (
     <div className="container">
-      <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
-        <button
-          type="button"
-          className="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          style={{ marginLeft: "20%", marginRight: "20%" }}
-        >
-          Nova tarefa
-          <Iconadd />
-        </button>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={importarTarefas}
-          style={{ marginLeft: "20%", marginRight: "20%" }}
-        >
-          Importar Tarefa
-          <Iconimport />
-        </button>
-        {showExportButton && (
-          <button
-            type="button"
-            className="btn btn-success"
-            data-bs-toggle="modal"
-            data-bs-target="#Exportar"
-            style={{ marginLeft: "20%", marginRight: "20%" }}
-          >
-            Exportar Tarefa
-            <Iconexport />
-          </button>
-        )}
-        {showDeleteAllButton && (
-          <button
-            type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "20%", marginRight: "20%" }}
-            onClick={excluirTodasAsTarefas}
-          >
-            Excluir Todas as Tarefas
-            <Icondelete />
-          </button>
-        )}
+      <div className="row">
+        <div className="col-12 col-md-6 mx-auto mt-3">
+          <div className="d-flex flex-column align-items-center">
+            <button
+              type="button"
+              className="btn btn-primary btn-custom-size mb-2 scroll-reveal"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              Nova tarefa
+              <Iconadd />
+            </button>
+            <button
+              type="button"
+              className="btn btn-success btn-custom-size mb-2 scroll-reveal"
+              onClick={importarTarefas}
+            >
+              Importar Tarefa
+              <Iconimport />
+            </button>
+            {showExportButton && (
+              <button
+                type="button"
+                className="btn btn-success btn-custom-size mb-2 d-md-block scroll-reveal"
+                data-bs-toggle="modal"
+                data-bs-target="#Exportar"
+              >
+                Exportar Tarefa
+                <Iconexport />
+              </button>
+            )}
+            {showDeleteAllButton && (
+              <button
+                type="button"
+                className="btn btn-danger btn-custom-size scroll-reveal"
+                onClick={excluirTodasAsTarefas}
+              >
+                Excluir Todas as Tarefas
+                <Icondelete />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
+
       {showTaskCont && (
         <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
           Total de Tarefas ativas: {contarTarefas()}
