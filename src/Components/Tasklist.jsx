@@ -348,13 +348,23 @@ export default function Search() {
         input.addEventListener("change", (event) => {
           const file = event.target.files[0];
           if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const content = e.target.result;
-              setImportedTasks(content);
-              setShowImportModal(true);
-            };
-            reader.readAsText(file);
+            if (file.name.endsWith(".txt")) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                const content = e.target.result;
+                setImportedTasks(content);
+                setShowImportModal(true);
+              };
+              reader.readAsText(file);
+            } else {
+              Swal.fire({
+                title: "Erro",
+                text: "Apenas arquivos em Txt são importados",
+                icon: "error",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#0D6EFD",
+              });
+            }
           }
         });
 
