@@ -427,7 +427,7 @@ export default function Search() {
           onClick={importarTarefas}
           style={{ marginLeft: "20%", marginRight: "20%" }}
         >
-          Importar
+          Importar Tarefa
           <Iconimport />
         </button>
         {showExportButton && (
@@ -438,7 +438,7 @@ export default function Search() {
             data-bs-target="#Exportar"
             style={{ marginLeft: "20%", marginRight: "20%" }}
           >
-            Exportar
+            Exportar Tarefa
             <Iconexport />
           </button>
         )}
@@ -450,6 +450,7 @@ export default function Search() {
             onClick={excluirTodasAsTarefas}
           >
             Excluir Todas as Tarefas
+            <Icondelete />
           </button>
         )}
       </div>
