@@ -9,7 +9,7 @@ export default class Icon_add extends Component {
         height="20"
         style={{ marginLeft: 5 }}
         fill="currentColor"
-        class="bi bi-plus-lg"
+        className="bi bi-plus-lg"
         viewBox="0 0 16 16"
       >
         <path

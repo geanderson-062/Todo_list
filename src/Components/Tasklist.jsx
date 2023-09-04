@@ -15,8 +15,8 @@ import Icontxt from "./Icons/Icon_txt/index";
 import Iconcsv from "./Icons/Icon_csv/index";
 import Iconjson from "./Icons/Icon_json/index";
 //table component
-import Tableheaddate from "./Table_head_date";
-import Tableheaddescription from "./Table_head_description";
+import Tableheaddate from "./Table/Table_head_date/index";
+import Tableheaddescription from "./Table/Table_head_description/index";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
