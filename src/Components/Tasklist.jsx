@@ -1,22 +1,29 @@
 /* eslint-disable no-unused-vars */
+//libs
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+//styles
 import "../styles/index.css";
 //icon component
-import Iconedit from "./Icons/Icon_edit/index";
-import Icondelete from "./Icons/Icon_delete/index";
-import Iconimport from "./Icons/Icon_import/index";
-import Iconexport from "./Icons/Icon_export/index";
-import Iconadd from "./Icons/Icon_add/index";
-import Icontxt from "./Icons/Icon_txt/index";
-import Iconcsv from "./Icons/Icon_csv/index";
-import Iconjson from "./Icons/Icon_json/index";
+import Iconedit from "./Icons/Icon_edit";
+import Icondelete from "./Icons/Icon_delete";
+import Iconimport from "./Icons/Icon_import";
+import Iconexport from "./Icons/Icon_export";
+import Iconadd from "./Icons/Icon_add";
+import Icontxt from "./Icons/Icon_txt";
+import Iconcsv from "./Icons/Icon_csv";
+import Iconjson from "./Icons/Icon_json";
 //table component
 import Tableheaddate from "./Tables/Table_head_date/index";
-import Tableheaddescription from "./Tables/Table_head_description/index";
+import Tableheaddescription from "./Tables/Table_head_description";
+//title compoenent
+import Titlemodalfileexport from "./Titles/Title_modal_file_export";
+import Titlemodalfileviewimport from "./Titles/Title_modal_file_view_import";
+import Titlemodalnewtask from "./Titles/Title_modal_new_task";
+import Titleinfotasks from "./Titles/Title_info_tasks";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -484,9 +491,7 @@ export default function Search() {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Escolha o formarto do arquivo
-              </h1>
+              <Titlemodalfileexport />
               <button
                 type="button"
                 className="btn-close"
@@ -552,9 +557,7 @@ export default function Search() {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title" id="importModalLabel">
-                Tarefas Importadas
-              </h4>
+              <Titlemodalfileviewimport />
               <button
                 type="button"
                 className="btn-close"
@@ -586,7 +589,7 @@ export default function Search() {
                   setShowImportModal(false);
                 }}
               >
-                Adicionar Tarefas Importadas
+                Adicionar Tarefas
               </button>
             </div>
           </div>
@@ -605,9 +608,7 @@ export default function Search() {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                Nova tarefa
-              </h1>
+              <Titlemodalnewtask />
               <button
                 type="button"
                 className="btn-close"
@@ -678,9 +679,7 @@ export default function Search() {
       {/* Tarefas */}
       <div>
         {tarefas.length === 0 ? (
-          <p className="fs-1 text-center scroll-reveal">
-            Nenhuma tarefa em andamento.
-          </p>
+          <Titleinfotasks />
         ) : (
           tarefas.map((tarefa, index) => (
             <div key={index}>
