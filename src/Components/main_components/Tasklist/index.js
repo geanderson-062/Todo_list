@@ -6,22 +6,14 @@ import ScrollReveal from "scrollreveal";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
-import Icondelete from "../../Icons/Icon_delete";
+//components
+import Deleteallbutton from "../../Buttons/Delete_all_buton";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
-
 //modals
 import NewTaskModal from "../../Modals/NewTaskModal";
 import ImportModal from "../../Modals/ImportModal";
 import ExportModal from "../../Modals/ExportModal";
-import TaskModal from "../../Modals/TaskModal";
-import EditModal from "../../Modals/EditModal";
-
-import DatePicker from "react-datepicker";
-import Labelnametask from "../../Labels/Label_name_task";
-import Labeldescription from "../../Labels/Label_description";
-import Iconedit from "../../Icons/Icon_edit";
-import Tableheaddate from "../../Tables/Table_head_date/index";
-import Tableheaddescription from "../../Tables/Table_head_description";
+import TaskModals from "../../Modals/TaskModals";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -482,19 +474,13 @@ export default function Search() {
             )}
 
             {showDeleteAllButton && (
-              <button
-                type="button"
-                className="btn btn-danger btn-main_custom-size scroll-reveal"
-                onClick={excluirTodasAsTarefas}
-              >
-                Excluir Todas as Tarefas
-                <Icondelete />
-              </button>
+              <Deleteallbutton excluirTodasAsTarefas={excluirTodasAsTarefas} />
             )}
           </div>
         </div>
       </div>
 
+      {/*Quantas Tarefas tem ativa*/}
       {showTaskCont && (
         <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
           Total de Tarefas ativas: {contarTarefas()}
@@ -509,215 +495,29 @@ export default function Search() {
           <Titleinfotasks />
         ) : (
           tarefas.map((tarefa, index) => (
-            <div key={index}>
-              <div className="row">
-                <div className="col-12 col-md-6 mx-auto mt-3">
-                  <div className="d-flex flex-column align-items-center">
-                    {" "}
-                    <button
-                      type="button"
-                      className="btn btn-tast-custom-size btn-primary mb-0"
-                      data-bs-toggle="modal"
-                      data-bs-target={`#TaskModal${index}`}
-                      onClick={() => abrirModalTarefa()}
-                    >
-                      <p>
-                        {index + 1}° Tarefa: {nomeTarefa[index]}
-                      </p>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal da tarefa */}
-              <div
-                className={`modal fade ${
-                  showTaskModal === index ? "show" : ""
-                }`}
-                style={{ display: showTaskModal === index ? "block" : "none" }}
-                id={`TaskModal${index}`} // Use o índice para tornar o ID único
-                data-bs-backdrop="static"
-                data-bs-keyboard="false"
-                tabIndex="-1"
-                aria-labelledby={`staticBackdropLabel${index}`} // Use o índice para tornar o ID único
-                aria-hidden={showTaskModal !== index}
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        {nomeTarefa[index]}
-                      </h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <table className="table table-secondary table-bordered table-hover">
-                        <Tableheaddescription />
-                        <tbody>
-                          <tr className="bg-dark">
-                            <td>{tarefa}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <table className="table table-secondary table-bordered table-hover">
-                        <Tableheaddate />
-                        <tbody>
-                          <tr className="bg-dark">
-                            <td>{dataStart[index]}</td>
-                            <td>{dataConclusion[index]}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-dismiss="modal"
-                      >
-                        Ok
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginRight: 5 }}
-                        className="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#editModal${index}`}
-                        onClick={() => editarTarefa(index)}
-                        title="Editar Tarefa"
-                      >
-                        <Iconedit />
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginRight: 5 }}
-                        className="btn btn-danger"
-                        onClick={() => confirmarRemocaoTarefa(index)}
-                        title="Excluir Tarefa"
-                      >
-                        <Icondelete />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal de Edição */}
-              <div
-                className="modal fade"
-                id={`editModal${index}`}
-                tabIndex="-1"
-                aria-labelledby={`editModalLabel${index}`}
-                aria-hidden="true"
-              >
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h1
-                        className="modal-title fs-5"
-                        id={`editModalLabel${index}`}
-                      >
-                        Editar Tarefa
-                      </h1>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      <div className="input mb-3">
-                        <Labelnametask />
-                        <input
-                          type="text"
-                          value={novaNomeTarefa}
-                          onChange={(e) => setNovaNomeTarefa(e.target.value)}
-                          className="form-control"
-                          placeholder="nome com no máximo 22 caracteres"
-                        />
-                        <br />
-                        <Labeldescription />
-                        <input
-                          type="text"
-                          value={novaTarefa}
-                          onChange={(e) => setNovaTarefa(e.target.value)}
-                          className="form-control"
-                          placeholder="uma descrição clara de sua tarefa"
-                        />
-                        <br />
-                        <DatePicker
-                          selected={selectedStartDate}
-                          onChange={handleDateStartChange}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de inicio"
-                          className="form-control"
-                          isClearable
-                        />
-                        <br />
-                        <br />
-                        <DatePicker
-                          selected={selectedConclusionDate}
-                          onChange={handleDateConclusionChange}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de conclusão"
-                          className="form-control"
-                          isClearable
-                        />
-                      </div>
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        className="btn btn-primary"
-                        type="button"
-                        onClick={() => {
-                          salvarTarefaEditada();
-                        }}
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        data-bs-dismiss="modal"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TaskModals
+              key={index}
+              index={index}
+              nomeTarefa={nomeTarefa}
+              tarefa={tarefa}
+              dataStart={dataStart}
+              dataConclusion={dataConclusion}
+              novaNomeTarefa={novaNomeTarefa}
+              novaTarefa={novaTarefa}
+              selectedStartDate={selectedStartDate}
+              selectedConclusionDate={selectedConclusionDate}
+              setNovaNomeTarefa={setNovaNomeTarefa}
+              setNovaTarefa={setNovaTarefa}
+              handleDateStartChange={handleDateStartChange}
+              handleDateConclusionChange={handleDateConclusionChange}
+              salvarTarefaEditada={salvarTarefaEditada}
+              abrirModalTarefa={abrirModalTarefa}
+              editarTarefa={editarTarefa}
+              confirmarRemocaoTarefa={confirmarRemocaoTarefa}
+            />
           ))
         )}
       </div>
-      {/*   <TaskModal
-                      index={index}
-                      nomeTarefa={nomeTarefa}
-                      tarefa={tarefa}
-                      dataStart={dataStart}
-                      dataConclusion={dataConclusion}
-                      showTaskModal={showTaskModal}
-                      editarTarefa={editarTarefa}
-                      confirmarRemocaoTarefa={confirmarRemocaoTarefa}
-                    />
-                    <EditModal
-                      index={index}
-                      novaNomeTarefa={novaNomeTarefa} // Passe o valor da tarefa que deseja editar
-                      novaTarefa={novaTarefa} // Passe o valor da tarefa que deseja editar
-                      selectedStartDate={dataStart[index]} // Passe o valor da data de início da tarefa que deseja editar
-                      selectedConclusionDate={dataConclusion[index]} // Passe o valor da data de conclusão da tarefa que deseja editar
-                      salvarTarefaEditada={salvarTarefaEditada}
-                      setNovaNomeTarefa={setNovaNomeTarefa}
-                      setNovaTarefa={setNovaTarefa}
-                      handleDateStartChange={handleDateStartChange}
-                      handleDateConclusionChange={handleDateConclusionChange}
-                    />*/}
     </div>
   );
 }
