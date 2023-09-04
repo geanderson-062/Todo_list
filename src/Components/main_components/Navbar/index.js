@@ -1,5 +1,4 @@
 import { Component } from "react";
-import "../../../styles/index.css";
 
 export default class Navbar extends Component {
   render() {
