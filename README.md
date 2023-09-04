@@ -1,65 +1,61 @@
-# Simple Todo List App
-
-A simple Todo List application built using React.
-
-## Table of Contents
-
-- [Description](#description)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [License](#license)
+# Task Management System
 
 ## Description
 
-The Simple Todo List App is a React application that helps you keep track of tasks you need to do. You can add tasks along with their names and completion dates. The app also provides a feature to remove tasks from the list. Additionally, it includes a helpful information popup that explains the purpose of the application.
+This is a simple task management system built using React. It allows users to add, edit, delete, and export tasks. Tasks can have a name, description, start date, and conclusion date. You can also import tasks from a text file.
 
 ## Features
 
-- Add new tasks with names and completion dates.
-- Remove tasks from the list.
-- Information popup explaining the app's purpose.
-- Smooth reveal animation for a better user experience.
+- Add new tasks with a name, description, start date, and conclusion date.
+- Edit existing tasks.
+- Delete individual tasks.
+- Export tasks to text, CSV, or JSON files.
+- Import tasks from a text file.
 
-## Installation
+## Prerequisites
 
-1. Clone the repository to your local machine:
-   ```
-   git clone https://github.com/your-username/simple-todo-list.git
-   ```
-2. Navigate to the project directory:
-   ```
-   cd simple-todo-list
-   ```
-3. Install the required dependencies using npm:
-   ```
-   npm install
-   ```
+- Node.js installed on your machine.
+
+## Getting Started
+
+1. Clone this repository to your local machine.
+2. Navigate to the project directory in your terminal.
+3. Run `npm install` to install the necessary dependencies.
+4. Run `npm start` to start the development server.
 
 ## Usage
 
-1. Start the development server:
-   ```
-   npm start
-   ```
-2. Open your browser and navigate to `http://localhost:3000` to use the app.
-3. Click the "Nova tarefa" button to add a new task. Fill in the task name, task description, and completion date, then click "Adicionar."
-4. To remove a task, click the trash icon next to the task in the list.
-5. You can also click the information icon to see the app's purpose.
+- Click the "Nova tarefa" button to add a new task.
+- Click the "Importar Tarefas" button to import tasks from a text file (only `.txt` files are supported).
+- Click the "Exportar Tarefas" button to export tasks to text, CSV, or JSON files.
+- Click the "Excluir Todas as Tarefas" button to delete all tasks.
+- Click on a task to view its details.
+- Click the edit button in the task details modal to edit a task.
+- Click the delete button in the task details modal to delete a task.
+
+## Guidelines
+
+- The task name should have a maximum of 22 characters.
+- All fields must be filled in when adding or editing a task.
+- Task names exceeding the character limit will result in an error message.
+- The system will prompt for confirmation before deleting a task or all tasks.
+
+## Dependencies
+
+- React: A JavaScript library for building user interfaces.
+- SweetAlert2: A beautiful, responsive, customizable, and accessible (WAI-ARIA) replacement for JavaScript's popup boxes.
+- ScrollReveal: A JavaScript library for easy scroll animations.
+- React-datepicker: A simple and reusable datepicker component for React.
+- Other custom icons and styles are included.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Feel free to customize this README with your own information and additional details as needed for your project.
 
 ## Screenshots
 
 ![App Screenshot](https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile.png)
 ![App Screenshot](<https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile%20(1).png>)
 ![App Screenshot](<https://github.com/geanderson-062/Todo-list-react-vite/blob/main/screenshot/mobile%20(2).png>)
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-Replace the placeholders with actual content, and don't forget to include any relevant screenshots in the "screenshots" directory within your project. Also, make sure to update the GitHub repository URL, your username, and other relevant information accordingly.
-
-Feel free to customize this README template further based on your project's specific details and needs.
