@@ -6,7 +6,7 @@ import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
-import "../../../styles/index.css";
+import "./style.css";
 //icon component
 import Iconedit from "../../Icons/Icon_edit";
 import Icondelete from "../../Icons/Icon_delete";
