@@ -6,14 +6,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/index.css";
 //icon component
-import Iconedit from "./Icon_edit";
-import Icondelete from "./Icon_delete";
-import Iconimport from "./Icon_import";
-import Iconexport from "./Icon_export";
-import Iconadd from "./Icon_add";
-import Icontxt from "./Icon_txt";
-import Iconcsv from "./Icon_csv";
-import Iconjson from "./Icon_json";
+import Iconedit from "./Icons/Icon_edit/index";
+import Icondelete from "./Icons/Icon_delete/index";
+import Iconimport from "./Icons/Icon_import/index";
+import Iconexport from "./Icons/Icon_export/index";
+import Iconadd from "./Icons/Icon_add/index";
+import Icontxt from "./Icons/Icon_txt/index";
+import Iconcsv from "./Icons/Icon_csv/index";
+import Iconjson from "./Icons/Icon_json/index";
 //table component
 import Tableheaddate from "./Table_head_date";
 import Tableheaddescription from "./Table_head_description";
