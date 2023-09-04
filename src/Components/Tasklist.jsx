@@ -4,6 +4,19 @@ import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../styles/index.css";
+//icon component
+import Iconedit from "./Icon_edit";
+import Icondelete from "./Icon_delete";
+import Iconimport from "./Icon_import";
+import Iconexport from "./Icon_export";
+import Iconadd from "./Icon_add";
+import Icontxt from "./Icon_txt";
+import Iconcsv from "./Icon_csv";
+import Iconjson from "./Icon_json";
+//table component
+import Tableheaddate from "./Table_head_date";
+import Tableheaddescription from "./Table_head_description";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -215,7 +228,7 @@ export default function Search() {
   }, []);
 
   // Função para exportar a lista de tarefas em um arquivo de texto
-  const exportarListaTarefas = () => {
+  const exportarListaTarefasTXT = () => {
     if (tarefas.length === 0) {
       Swal.fire({
         title: "Lista Vazia",
@@ -242,28 +255,112 @@ export default function Search() {
     window.URL.revokeObjectURL(url);
   };
 
+  const exportarListaTarefasCSV = () => {
+    if (tarefas.length === 0) {
+      Swal.fire({
+        title: "Lista Vazia",
+        text: "A lista de tarefas está vazia. Não há nada para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+      return;
+    }
+
+    // Cabeçalho do CSV
+    const csvHeader =
+      "Nome da Tarefa,Descrição,Data de Início,Data de Conclusão\n";
+
+    // Linhas do CSV
+    const csvContent = tarefas
+      .map((tarefa, index) => {
+        return `${nomeTarefa[index]},${tarefa},${dataStart[index]},${dataConclusion[index]}\n`;
+      })
+      .join("");
+
+    // Combinar cabeçalho e conteúdo em um único CSV
+    const conteudo = csvHeader + csvContent;
+
+    const blob = new Blob([conteudo], { type: "text/csv;charset=utf-8" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lista_de_tarefas.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportarListaTarefasJSON = () => {
+    if (tarefas.length === 0) {
+      Swal.fire({
+        title: "Lista Vazia",
+        text: "A lista de tarefas está vazia. Não há nada para exportar.",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
+      return;
+    }
+
+    // Criar um objeto JSON com os dados das tarefas
+    const tarefasJSON = tarefas.map((tarefa, index) => {
+      return {
+        NomeTarefa: nomeTarefa[index],
+        Descricao: tarefa,
+        DataInicio: dataStart[index],
+        DataConclusao: dataConclusion[index],
+      };
+    });
+
+    // Converter o objeto JSON em uma string JSON formatada
+    const conteudo = JSON.stringify(tarefasJSON, null, 2);
+
+    const blob = new Blob([conteudo], {
+      type: "application/json;charset=utf-8",
+    });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "lista_de_tarefas.json";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   const [importedTasks, setImportedTasks] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
 
   const importarTarefas = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".txt";
+    Swal.fire({
+      title: "Atenção",
+      text: "Apenas arquivos em Txt serão importados",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ok",
+      confirmButtonColor: "#0D6EFD",
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: "#DC3545",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".txt";
 
-    input.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target.result;
-          setImportedTasks(content);
-          setShowImportModal(true);
-        };
-        reader.readAsText(file);
+        input.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const content = e.target.result;
+              setImportedTasks(content);
+              setShowImportModal(true);
+            };
+            reader.readAsText(file);
+          }
+        });
+
+        input.click();
       }
     });
-
-    input.click();
   };
 
   const adicionarTarefasImportadas = () => {
@@ -314,84 +411,51 @@ export default function Search() {
 
   return (
     <div className="container">
-      <div className="d-grid gap-2 col-6 mx-auto" style={{ marginTop: 50 }}>
-        <button
-          type="button"
-          className="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          style={{ marginLeft: "20%", marginRight: "20%" }}
-        >
-          Nova tarefa
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            style={{ marginLeft: 5 }}
-            fill="currentColor"
-            class="bi bi-plus-lg"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-            />
-          </svg>
-        </button>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={importarTarefas}
-          style={{ marginLeft: "20%", marginRight: "20%" }}
-        >
-          Importar
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            style={{ marginLeft: 5 }}
-            fill="currentColor"
-            class="bi bi-cloud-arrow-up-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-          </svg>
-        </button>
-        {showExportButton && (
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={exportarListaTarefas}
-            style={{ marginLeft: "20%", marginRight: "20%" }}
-          >
-            Exportar
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              style={{ marginLeft: 5 }}
-              fill="currentColor"
-              class="bi bi-filetype-txt"
-              viewBox="0 0 16 16"
+      <div className="row">
+        <div className="col-12 col-md-6 mx-auto mt-3">
+          <div className="d-flex flex-column align-items-center">
+            <button
+              type="button"
+              className="btn btn-primary btn-custom-size mb-2 scroll-reveal"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
             >
-              <path
-                fill-rule="evenodd"
-                d="M14 4.5V14a2 2 0 0 1-2 2h-2v-1h2a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.928 15.849v-3.337h1.136v-.662H0v.662h1.134v3.337h.794Zm4.689-3.999h-.894L4.9 13.289h-.035l-.832-1.439h-.932l1.228 1.983-1.24 2.016h.862l.853-1.415h.035l.85 1.415h.907l-1.253-1.992 1.274-2.007Zm1.93.662v3.337h-.794v-3.337H6.619v-.662h3.064v.662H8.546Z"
-              />
-            </svg>
-          </button>
-        )}
-        {showDeleteAllButton && (
-          <button
-            type="button"
-            className="btn btn-danger"
-            style={{ marginLeft: "20%", marginRight: "20%" }}
-            onClick={excluirTodasAsTarefas}
-          >
-            Excluir Todas as Tarefas
-          </button>
-        )}
+              Nova tarefa
+              <Iconadd />
+            </button>
+            <button
+              type="button"
+              className="btn btn-success btn-custom-size mb-2 scroll-reveal"
+              onClick={importarTarefas}
+            >
+              Importar Tarefa
+              <Iconimport />
+            </button>
+            {showExportButton && (
+              <button
+                type="button"
+                className="btn btn-success btn-custom-size mb-2 d-md-block scroll-reveal"
+                data-bs-toggle="modal"
+                data-bs-target="#Exportar"
+              >
+                Exportar Tarefa
+                <Iconexport />
+              </button>
+            )}
+            {showDeleteAllButton && (
+              <button
+                type="button"
+                className="btn btn-danger btn-custom-size scroll-reveal"
+                onClick={excluirTodasAsTarefas}
+              >
+                Excluir Todas as Tarefas
+                <Icondelete />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
+
       {showTaskCont && (
         <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
           Total de Tarefas ativas: {contarTarefas()}
@@ -399,6 +463,73 @@ export default function Search() {
       )}
 
       <br />
+      {/* Modal para exportar arquivos  */}
+      <div
+        className="modal fade"
+        id="Exportar"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Escolha o formarto do arquivo
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div
+                className="d-grid gap-2 col-6 mx-auto"
+                style={{ marginTop: 50 }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasTXT}
+                >
+                  Exportar Txt
+                  <Icontxt />
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasCSV}
+                >
+                  Exportar CSV
+                  <Iconcsv />
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={exportarListaTarefasJSON}
+                >
+                  Exportar JSON
+                  <Iconjson />
+                </button>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Modal para visualizar e adicionar tarefas importadas */}
       <div
         className={`modal fade ${showImportModal ? "show" : ""}`}
@@ -571,16 +702,7 @@ export default function Search() {
                         onClick={() => editarTarefa(index)}
                         title="Editar Tarefa"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-pencil-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                        </svg>
+                        <Iconedit />
                       </button>
                       <button
                         href="#"
@@ -589,16 +711,7 @@ export default function Search() {
                         onClick={() => confirmarRemocaoTarefa(index)}
                         title="Excluir Tarefa"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-trash-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                        </svg>
+                        <Icondelete />
                       </button>
                     </td>
                   </tr>
@@ -633,11 +746,7 @@ export default function Search() {
                     </div>
                     <div class="modal-body">
                       <table className="table table-secondary table-bordered table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col">Descrição</th>
-                          </tr>
-                        </thead>
+                        <Tableheaddescription />
                         <tbody>
                           <tr className="bg-dark">
                             <td>{tarefa}</td>
@@ -645,12 +754,7 @@ export default function Search() {
                         </tbody>
                       </table>
                       <table className="table table-secondary table-bordered table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col">Data de inicio</th>
-                            <th scope="col">Data de Conclusão</th>
-                          </tr>
-                        </thead>
+                        <Tableheaddate />
                         <tbody>
                           <tr className="bg-dark">
                             <td>{dataStart[index]}</td>
@@ -676,16 +780,7 @@ export default function Search() {
                         onClick={() => editarTarefa(index)}
                         title="Editar Tarefa"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-pencil-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                        </svg>
+                        <Iconedit />
                       </button>
                       <button
                         href="#"
@@ -694,16 +789,7 @@ export default function Search() {
                         onClick={() => confirmarRemocaoTarefa(index)}
                         title="Excluir Tarefa"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-trash-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                        </svg>
+                        <Icondelete />
                       </button>
                     </div>
                   </div>
