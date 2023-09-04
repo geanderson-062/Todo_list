@@ -1,0 +1,13 @@
+.btn-main_custom-size {
+  width: 230px; /* Ajuste o tamanho da largura desejado aqui */
+  height: 40px; /* Ajuste o tamanho da altura desejado aqui */
+  font-size: 16px; /* Ajuste o tamanho da fonte, se necessário */
+}
+
+.btn-tast-custom-size {
+  width: 320px; /* Ajuste o tamanho da largura desejado aqui */
+  height: 40px; /* Ajuste o tamanho da altura desejado aqui */
+  font-size: 16px; /* Ajuste o tamanho da fonte, se necessário */
+  text-align: left;
+}
+

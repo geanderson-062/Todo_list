@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class Icon_export extends Component {
+export default class Icon_add extends Component {
   render() {
     return (
       <svg
@@ -9,10 +9,13 @@ export default class Icon_export extends Component {
         height="20"
         style={{ marginLeft: 5 }}
         fill="currentColor"
-        className="bi bi-share-fill"
+        className="bi bi-plus-lg"
         viewBox="0 0 16 16"
       >
-        <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z" />
+        <path
+          fill-rule="evenodd"
+          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+        />
       </svg>
     );
   }

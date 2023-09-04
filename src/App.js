@@ -3,10 +3,10 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
 //conponents
-import Navbar from "./Components/Navbar";
-import Tasklist from "./Components/Tasklist";
-import Animation from "./Components/Animation";
-import Footer from "./Components/Footer";
+import Navbar from "./Components/main_components/Navbar";
+import Tasklist from "./Components/main_components/Tasklist";
+import Animation from "./Components/main_components/Animation";
+import Footer from "./Components/main_components/Footer";
 
 function App() {
   return (
