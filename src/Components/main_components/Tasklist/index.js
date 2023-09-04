@@ -24,6 +24,9 @@ import Titlemodalfileexport from "../../Titles/Title_modal_file_export";
 import Titlemodalfileviewimport from "../../Titles/Title_modal_file_view_import";
 import Titlemodalnewtask from "../../Titles/Title_modal_new_task";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
+//label component
+import Labelnametask from "../../Labels/Label_name_task";
+import Labeldescription from "../../Labels/Label_description";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -66,26 +69,38 @@ export default function Search() {
   const [showTaskCont, setShowTaskCont] = useState(false);
 
   const adicionarTarefa = () => {
+    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
       selectedStartDate !== null &&
       selectedConclusionDate !== null
     ) {
-      setTarefas([...tarefas, novaTarefa]);
-      setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
-      setDataStart([
-        ...dataStart,
-        selectedStartDate.toISOString().split("T")[0],
-      ]);
-      setDataConclusion([
-        ...dataStart,
-        selectedConclusionDate.toISOString().split("T")[0],
-      ]);
-      setNovaTarefa("");
-      setNovaNomeTarefa("");
-      setSelectedStartDate(null);
-      setSelectedConclusionDate(null);
+      if (novaNomeTarefa.length <= MAX_CARACTERES_NOME_TAREFA) {
+        setTarefas([...tarefas, novaTarefa]);
+        setNomeTarefa([...nomeTarefa, novaNomeTarefa]);
+        setDataStart([
+          ...dataStart,
+          selectedStartDate.toISOString().split("T")[0],
+        ]);
+        setDataConclusion([
+          ...dataStart,
+          selectedConclusionDate.toISOString().split("T")[0],
+        ]);
+        setNovaTarefa("");
+        setNovaNomeTarefa("");
+        setSelectedStartDate(null);
+        setSelectedConclusionDate(null);
+      } else {
+        Swal.fire({
+          title: "Erro!",
+          text: `O nome da tarefa deve ter no máximo ${MAX_CARACTERES_NOME_TAREFA} caracteres.`,
+          icon: "error",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "#0D6EFD",
+        });
+      }
     } else {
       Swal.fire({
         title: "Erro!",
@@ -433,7 +448,7 @@ export default function Search() {
           <div className="d-flex flex-column align-items-center">
             <button
               type="button"
-              className="btn btn-primary btn-custom-size mb-2 scroll-reveal"
+              className="btn btn-primary btn-main_custom-size mb-2 scroll-reveal"
               data-bs-toggle="modal"
               data-bs-target="#staticBackdrop"
             >
@@ -442,27 +457,27 @@ export default function Search() {
             </button>
             <button
               type="button"
-              className="btn btn-success btn-custom-size mb-2 scroll-reveal"
+              className="btn btn-success btn-main_custom-size mb-2 scroll-reveal"
               onClick={importarTarefas}
             >
-              Importar Tarefa
+              Importar Tarefas
               <Iconimport />
             </button>
             {showExportButton && (
               <button
                 type="button"
-                className="btn btn-success btn-custom-size mb-2 d-md-block scroll-reveal"
+                className="btn btn-success btn-main_custom-size mb-2 d-md-block scroll-reveal"
                 data-bs-toggle="modal"
                 data-bs-target="#Exportar"
               >
-                Exportar Tarefa
+                Exportar Tarefas
                 <Iconexport />
               </button>
             )}
             {showDeleteAllButton && (
               <button
                 type="button"
-                className="btn btn-danger btn-custom-size scroll-reveal"
+                className="btn btn-danger btn-main_custom-size scroll-reveal"
                 onClick={excluirTodasAsTarefas}
               >
                 Excluir Todas as Tarefas
@@ -618,20 +633,22 @@ export default function Search() {
             </div>
             <div className="modal-body">
               <div className="input mb-3">
+                <Labelnametask />
                 <input
                   type="text"
                   value={novaNomeTarefa}
                   onChange={(e) => setNovaNomeTarefa(e.target.value)}
                   className="form-control"
-                  placeholder="Digite o nome da tarefa"
+                  placeholder="nome com no máximo 22 caracteres"
                 />
                 <br />
+                <Labeldescription />
                 <input
                   type="text"
                   value={novaTarefa}
                   onChange={(e) => setNovaTarefa(e.target.value)}
                   className="form-control"
-                  placeholder="Digite uma descrição"
+                  placeholder="uma descrição clara de sua tarefa"
                 />
                 <br />
                 <DatePicker
@@ -683,49 +700,24 @@ export default function Search() {
         ) : (
           tarefas.map((tarefa, index) => (
             <div key={index}>
-              <br />
-              <table className="table table-secondary table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Tarefa #{index + 1}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-dark">
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#TaskModal${index}`}
-                        onClick={() => abrirModalTarefa()}
-                      >
-                        {nomeTarefa[index]}
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginLeft: 5, marginRight: 5 }}
-                        className="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#editModal${index}`}
-                        onClick={() => editarTarefa(index)}
-                        title="Editar Tarefa"
-                      >
-                        <Iconedit />
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginRight: 5 }}
-                        className="btn btn-danger"
-                        onClick={() => confirmarRemocaoTarefa(index)}
-                        title="Excluir Tarefa"
-                      >
-                        <Icondelete />
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="row">
+                <div className="col-12 col-md-6 mx-auto mt-3">
+                  <div className="d-flex flex-column align-items-center">
+                    {" "}
+                    <button
+                      type="button"
+                      className="btn btn-tast-custom-size btn-primary mb-0"
+                      data-bs-toggle="modal"
+                      data-bs-target={`#TaskModal${index}`}
+                      onClick={() => abrirModalTarefa()}
+                    >
+                      <p>
+                        {index + 1}° Tarefa: {nomeTarefa[index]}
+                      </p>
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               {/* Modal da tarefa */}
               <div
@@ -831,20 +823,22 @@ export default function Search() {
                     </div>
                     <div className="modal-body">
                       <div className="input mb-3">
+                        <Labelnametask />
                         <input
                           type="text"
                           value={novaNomeTarefa}
                           onChange={(e) => setNovaNomeTarefa(e.target.value)}
                           className="form-control"
-                          placeholder="Digite o nome da tarefa"
+                          placeholder="nome com no máximo 22 caracteres"
                         />
                         <br />
+                        <Labeldescription />
                         <input
                           type="text"
                           value={novaTarefa}
                           onChange={(e) => setNovaTarefa(e.target.value)}
                           className="form-control"
-                          placeholder="Digite uma descrição"
+                          placeholder="uma descrição clara de sua tarefa"
                         />
                         <br />
                         <DatePicker
