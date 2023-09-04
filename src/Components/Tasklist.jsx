@@ -329,24 +329,37 @@ export default function Search() {
   const [showImportModal, setShowImportModal] = useState(false);
 
   const importarTarefas = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".txt";
+    Swal.fire({
+      title: "Atenção",
+      text: "Apenas arquivos em Txt serão importados",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ok",
+      confirmButtonColor: "#0D6EFD",
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: "#DC3545",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".txt";
 
-    input.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target.result;
-          setImportedTasks(content);
-          setShowImportModal(true);
-        };
-        reader.readAsText(file);
+        input.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const content = e.target.result;
+              setImportedTasks(content);
+              setShowImportModal(true);
+            };
+            reader.readAsText(file);
+          }
+        });
+
+        input.click();
       }
     });
-
-    input.click();
   };
 
   const adicionarTarefasImportadas = () => {
