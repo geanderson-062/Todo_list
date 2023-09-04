@@ -121,9 +121,12 @@ export default function Search() {
   };
 
   const salvarTarefaEditada = () => {
+    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+
     if (
       novaTarefa.trim() !== "" &&
       novaNomeTarefa.trim() !== "" &&
+      novaNomeTarefa.length <= MAX_CARACTERES_NOME_TAREFA && // Verifica o limite de caracteres
       selectedStartDate !== null &&
       selectedConclusionDate !== null
     ) {
@@ -137,6 +140,7 @@ export default function Search() {
       datasAtualizadas[indiceEdicaoTarefa] = selectedStartDate
         .toISOString()
         .split("T")[0];
+
       const datasConclusionAtualizadas = [...dataConclusion];
       datasConclusionAtualizadas[indiceEdicaoTarefa] = selectedConclusionDate
         .toISOString()
@@ -152,6 +156,14 @@ export default function Search() {
       setSelectedStartDate(null);
       setSelectedConclusionDate(null);
       setIndiceEdicaoTarefa(null);
+    } else if (novaNomeTarefa.length > MAX_CARACTERES_NOME_TAREFA) {
+      Swal.fire({
+        title: "Erro!",
+        text: `O nome da tarefa deve ter no máximo ${MAX_CARACTERES_NOME_TAREFA} caracteres.`,
+        icon: "error",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#0D6EFD",
+      });
     } else {
       Swal.fire({
         title: "Erro!",
