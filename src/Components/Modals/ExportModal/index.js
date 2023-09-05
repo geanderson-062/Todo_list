@@ -9,19 +9,22 @@ const ExportModal = ({
   exportarListaTarefasTXT,
   exportarListaTarefasCSV,
   exportarListaTarefasJSON,
+  showExportButton,
 }) => {
   return (
     /*Modal para exportar arquivos  */
     <>
-      <button
-        type="button"
-        className="btn btn-success btn-main_custom-size mb-2 d-md-block scroll-reveal"
-        data-bs-toggle="modal"
-        data-bs-target="#Exportar"
-      >
-        Exportar Tarefas
-        <Iconexport />
-      </button>
+      {showExportButton && (
+        <button
+          type="button"
+          className="btn btn-success btn-main_custom-size mb-2 d-md-block scroll-reveal"
+          data-bs-toggle="modal"
+          data-bs-target="#Exportar"
+        >
+          Exportar Tarefas
+          <Iconexport />
+        </button>
+      )}
       <div
         className="modal fade"
         id="Exportar"

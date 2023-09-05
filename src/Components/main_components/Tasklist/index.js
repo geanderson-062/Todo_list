@@ -465,17 +465,18 @@ export default function Search() {
               importarTarefas={importarTarefas}
               adicionarTarefasImportadas={adicionarTarefasImportadas}
             />
-            {showExportButton && (
-              <ExportModal
-                exportarListaTarefasTXT={exportarListaTarefasTXT}
-                exportarListaTarefasCSV={exportarListaTarefasCSV}
-                exportarListaTarefasJSON={exportarListaTarefasJSON}
-              />
-            )}
 
-            {showDeleteAllButton && (
-              <Deleteallbutton excluirTodasAsTarefas={excluirTodasAsTarefas} />
-            )}
+            <ExportModal
+              exportarListaTarefasTXT={exportarListaTarefasTXT}
+              exportarListaTarefasCSV={exportarListaTarefasCSV}
+              exportarListaTarefasJSON={exportarListaTarefasJSON}
+              showExportButton={showExportButton}
+            />
+
+            <Deleteallbutton
+              showDeleteAllButton={showDeleteAllButton}
+              excluirTodasAsTarefas={excluirTodasAsTarefas}
+            />
           </div>
         </div>
       </div>
