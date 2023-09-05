@@ -8,6 +8,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./style.css";
 //vareaveis de estados
 import { StateVariables } from "../../../Utils/StateVariables";
+//useEffects
+import {
+  useDeleteAllButtonEffect,
+  useExportButtonEffect,
+  useTaskContEffect,
+  useScrollRevealEffect,
+} from "../../../Utils/useEffects";
 //components
 import Deleteallbutton from "../../Buttons/Delete_all_buton";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
@@ -243,30 +250,10 @@ export default function Search() {
     });
   };
 
-  useEffect(() => {
-    // Verifique se há mais de uma tarefa para mostrar o botão "Excluir Todas as Tarefas"
-    setShowDeleteAllButton(tarefas.length > 1);
-  }, [setShowDeleteAllButton, tarefas]);
-
-  useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o botão "Exportar Tarefas"
-    setShowExportButton(tarefas.length > 0);
-  }, [setShowExportButton, tarefas]);
-
-  useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o conteúdo das tarefas
-    setShowTaskCont(tarefas.length > 0);
-  }, [setShowTaskCont, tarefas]);
-
-  useEffect(() => {
-    ScrollReveal().reveal(".scroll-reveal", {
-      duration: 1000,
-      distance: "20px",
-      easing: "ease-in-out",
-      origin: "bottom",
-      delay: 100,
-    });
-  }, []);
+  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
+  useExportButtonEffect(setShowExportButton, tarefas);
+  useTaskContEffect(setShowTaskCont, tarefas);
+  useScrollRevealEffect();
 
   // Função para exportar a lista de tarefas em um arquivo de texto
   const exportarListaTarefasTXT = () => {
