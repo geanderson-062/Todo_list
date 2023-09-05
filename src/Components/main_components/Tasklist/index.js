@@ -6,6 +6,8 @@ import ScrollReveal from "scrollreveal";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
+//vareaveis de estados
+import { StateVariables } from "../../../Utils/StateVariables";
 //components
 import Deleteallbutton from "../../Buttons/Delete_all_buton";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
@@ -17,6 +19,39 @@ import TaskModals from "../../Modals/TaskModals";
 import Titleactivetasks from "../../Titles/Title_active tasks";
 
 export default function Search() {
+  const {
+    novaTarefa,
+    setNovaTarefa,
+    novaNomeTarefa,
+    setNovaNomeTarefa,
+    selectedStartDate,
+    setSelectedStartDate,
+    selectedConclusionDate,
+    setSelectedConclusionDate,
+    indiceEdicaoTarefa,
+    setIndiceEdicaoTarefa,
+    novaDataConclusion,
+    novaData,
+    setNovaDataConclusion,
+    setNovaData,
+    showTaskModal,
+    setShowTaskModal,
+    showExportButton,
+    setShowExportButton,
+    showDeleteAllButton,
+    setShowDeleteAllButton,
+    showTaskCont,
+    setShowTaskCont,
+    tarefas,
+    setTarefas,
+    nomeTarefa,
+    setNomeTarefa,
+    dataStart,
+    setDataStart,
+    dataConclusion,
+    setDataConclusion,
+  } = StateVariables();
+
   const confirmarRemocaoTarefa = (index) => {
     Swal.fire({
       title: "Confirmação",
@@ -39,22 +74,6 @@ export default function Search() {
       }
     });
   };
-
-  const [tarefas, setTarefas] = useState([]);
-  const [novaTarefa, setNovaTarefa] = useState("");
-  const [nomeTarefa, setNomeTarefa] = useState([]);
-  const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
-  const [novaData, setNovaData] = useState("");
-  const [novaDataConclusion, setNovaDataConclusion] = useState("");
-  const [dataStart, setDataStart] = useState([]);
-  const [dataConclusion, setDataConclusion] = useState([]);
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedConclusionDate, setSelectedConclusionDate] = useState(null);
-  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
-  const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
-  const [showExportButton, setShowExportButton] = useState(false);
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showTaskCont, setShowTaskCont] = useState(false);
 
   const adicionarTarefa = () => {
     const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
@@ -227,17 +246,17 @@ export default function Search() {
   useEffect(() => {
     // Verifique se há mais de uma tarefa para mostrar o botão "Excluir Todas as Tarefas"
     setShowDeleteAllButton(tarefas.length > 1);
-  }, [tarefas]);
+  }, [setShowDeleteAllButton, tarefas]);
 
   useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
+    // Verifique se há mais de 0 tarefa para mostrar o botão "Exportar Tarefas"
     setShowExportButton(tarefas.length > 0);
-  }, [tarefas]);
+  }, [setShowExportButton, tarefas]);
 
   useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
+    // Verifique se há mais de 0 tarefa para mostrar o conteúdo das tarefas
     setShowTaskCont(tarefas.length > 0);
-  }, [tarefas]);
+  }, [setShowTaskCont, tarefas]);
 
   useEffect(() => {
     ScrollReveal().reveal(".scroll-reveal", {
