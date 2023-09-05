@@ -14,6 +14,7 @@ import NewTaskModal from "../../Modals/NewTaskModal";
 import ImportModal from "../../Modals/ImportModal";
 import ExportModal from "../../Modals/ExportModal";
 import TaskModals from "../../Modals/TaskModals";
+import Titleactivetasks from "../../Titles/Title_active tasks";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -481,12 +482,10 @@ export default function Search() {
         </div>
       </div>
 
-      {/*Quantas Tarefas tem ativa*/}
-      {showTaskCont && (
-        <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
-          Total de Tarefas ativas: {contarTarefas()}
-        </h4>
-      )}
+      <Titleactivetasks
+        showTaskCont={showTaskCont}
+        contarTarefas={contarTarefas}
+      />
 
       <br />
 
