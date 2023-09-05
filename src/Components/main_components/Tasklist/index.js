@@ -3,30 +3,17 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import ScrollReveal from "scrollreveal";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
-//icon component
-import Iconedit from "../../Icons/Icon_edit";
-import Icondelete from "../../Icons/Icon_delete";
-import Iconimport from "../../Icons/Icon_import";
-import Iconexport from "../../Icons/Icon_export";
-import Iconadd from "../../Icons/Icon_add";
-import Icontxt from "../../Icons/Icon_txt";
-import Iconcsv from "../../Icons/Icon_csv";
-import Iconjson from "../../Icons/Icon_json";
-//table component
-import Tableheaddate from "../../Tables/Table_head_date/index";
-import Tableheaddescription from "../../Tables/Table_head_description";
-//title compoenent
-import Titlemodalfileexport from "../../Titles/Title_modal_file_export";
-import Titlemodalfileviewimport from "../../Titles/Title_modal_file_view_import";
-import Titlemodalnewtask from "../../Titles/Title_modal_new_task";
+//components
+import Deleteallbutton from "../../Buttons/Delete_all_buton";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
-//label component
-import Labelnametask from "../../Labels/Label_name_task";
-import Labeldescription from "../../Labels/Label_description";
+//modals
+import NewTaskModal from "../../Modals/NewTaskModal";
+import ImportModal from "../../Modals/ImportModal";
+import ExportModal from "../../Modals/ExportModal";
+import TaskModals from "../../Modals/TaskModals";
 
 export default function Search() {
   const confirmarRemocaoTarefa = (index) => {
@@ -458,48 +445,42 @@ export default function Search() {
       <div className="row">
         <div className="col-12 col-md-6 mx-auto mt-3">
           <div className="d-flex flex-column align-items-center">
-            <button
-              type="button"
-              className="btn btn-primary btn-main_custom-size mb-2 scroll-reveal"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
-            >
-              Nova tarefa
-              <Iconadd />
-            </button>
-            <button
-              type="button"
-              className="btn btn-success btn-main_custom-size mb-2 scroll-reveal"
-              onClick={importarTarefas}
-            >
-              Importar Tarefas
-              <Iconimport />
-            </button>
+            <NewTaskModal
+              novaNomeTarefa={novaNomeTarefa}
+              setNovaNomeTarefa={setNovaNomeTarefa}
+              novaTarefa={novaTarefa}
+              setNovaTarefa={setNovaTarefa}
+              selectedStartDate={selectedStartDate}
+              handleDateStartChange={handleDateStartChange}
+              selectedConclusionDate={selectedConclusionDate}
+              handleDateConclusionChange={handleDateConclusionChange}
+              adicionarTarefa={adicionarTarefa}
+              adicionarNomeTarefa={adicionarNomeTarefa}
+            />
+            <ImportModal
+              showImportModal={showImportModal}
+              setShowImportModal={setShowImportModal}
+              importedTasks={importedTasks}
+              setImportedTasks={setImportedTasks}
+              importarTarefas={importarTarefas}
+              adicionarTarefasImportadas={adicionarTarefasImportadas}
+            />
             {showExportButton && (
-              <button
-                type="button"
-                className="btn btn-success btn-main_custom-size mb-2 d-md-block scroll-reveal"
-                data-bs-toggle="modal"
-                data-bs-target="#Exportar"
-              >
-                Exportar Tarefas
-                <Iconexport />
-              </button>
+              <ExportModal
+                exportarListaTarefasTXT={exportarListaTarefasTXT}
+                exportarListaTarefasCSV={exportarListaTarefasCSV}
+                exportarListaTarefasJSON={exportarListaTarefasJSON}
+              />
             )}
+
             {showDeleteAllButton && (
-              <button
-                type="button"
-                className="btn btn-danger btn-main_custom-size scroll-reveal"
-                onClick={excluirTodasAsTarefas}
-              >
-                Excluir Todas as Tarefas
-                <Icondelete />
-              </button>
+              <Deleteallbutton excluirTodasAsTarefas={excluirTodasAsTarefas} />
             )}
           </div>
         </div>
       </div>
 
+      {/*Quantas Tarefas tem ativa*/}
       {showTaskCont && (
         <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
           Total de Tarefas ativas: {contarTarefas()}
@@ -507,394 +488,33 @@ export default function Search() {
       )}
 
       <br />
-      {/* Modal para exportar arquivos  */}
-      <div
-        className="modal fade"
-        id="Exportar"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <Titlemodalfileexport />
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div
-                className="d-grid gap-2 col-6 mx-auto"
-                style={{ marginTop: 50 }}
-              >
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={exportarListaTarefasTXT}
-                >
-                  Exportar Txt
-                  <Icontxt />
-                </button>
 
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={exportarListaTarefasCSV}
-                >
-                  Exportar CSV
-                  <Iconcsv />
-                </button>
-
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={exportarListaTarefasJSON}
-                >
-                  Exportar JSON
-                  <Iconjson />
-                </button>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-              >
-                Fechar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Modal para visualizar e adicionar tarefas importadas */}
-      <div
-        className={`modal fade ${showImportModal ? "show" : ""}`}
-        style={{ display: showImportModal ? "block" : "none" }}
-        id="importModal"
-        tabIndex="-1"
-        aria-labelledby="importModalLabel"
-        aria-hidden={!showImportModal}
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <Titlemodalfileviewimport />
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowImportModal(false)}
-                aria-label="Fechar"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <textarea
-                rows="5"
-                className="form-control"
-                value={importedTasks}
-                onChange={(e) => setImportedTasks(e.target.value)}
-              ></textarea>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => setShowImportModal(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="btn btn-success"
-                type="button"
-                onClick={() => {
-                  adicionarTarefasImportadas();
-                  setShowImportModal(false);
-                }}
-              >
-                Adicionar Tarefas
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Modal de Nova tarefa */}
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <Titlemodalnewtask />
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="input mb-3">
-                <Labelnametask />
-                <input
-                  type="text"
-                  value={novaNomeTarefa}
-                  onChange={(e) => setNovaNomeTarefa(e.target.value)}
-                  className="form-control"
-                  placeholder="nome com no máximo 22 caracteres"
-                />
-                <br />
-                <Labeldescription />
-                <input
-                  type="text"
-                  value={novaTarefa}
-                  onChange={(e) => setNovaTarefa(e.target.value)}
-                  className="form-control"
-                  placeholder="uma descrição clara de sua tarefa"
-                />
-                <br />
-                <DatePicker
-                  selected={selectedStartDate}
-                  onChange={handleDateStartChange}
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de inicio"
-                  className="form-control"
-                  isClearable
-                />
-                <br />
-                <br />
-                <DatePicker
-                  selected={selectedConclusionDate}
-                  onChange={handleDateConclusionChange}
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de conclusão"
-                  className="form-control"
-                  isClearable
-                />
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => {
-                  adicionarTarefa();
-                  adicionarNomeTarefa();
-                }}
-              >
-                Adicionar
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
       {/* Tarefas */}
       <div>
         {tarefas.length === 0 ? (
           <Titleinfotasks />
         ) : (
           tarefas.map((tarefa, index) => (
-            <div key={index}>
-              <div className="row">
-                <div className="col-12 col-md-6 mx-auto mt-3">
-                  <div className="d-flex flex-column align-items-center">
-                    {" "}
-                    <button
-                      type="button"
-                      className="btn btn-tast-custom-size btn-primary mb-0"
-                      data-bs-toggle="modal"
-                      data-bs-target={`#TaskModal${index}`}
-                      onClick={() => abrirModalTarefa()}
-                    >
-                      <p>
-                        {index + 1}° Tarefa: {nomeTarefa[index]}
-                      </p>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal da tarefa */}
-              <div
-                className={`modal fade ${
-                  showTaskModal === index ? "show" : ""
-                }`}
-                style={{ display: showTaskModal === index ? "block" : "none" }}
-                id={`TaskModal${index}`} // Use o índice para tornar o ID único
-                data-bs-backdrop="static"
-                data-bs-keyboard="false"
-                tabIndex="-1"
-                aria-labelledby={`staticBackdropLabel${index}`} // Use o índice para tornar o ID único
-                aria-hidden={showTaskModal !== index}
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        {nomeTarefa[index]}
-                      </h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <table className="table table-secondary table-bordered table-hover">
-                        <Tableheaddescription />
-                        <tbody>
-                          <tr className="bg-dark">
-                            <td>{tarefa}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <table className="table table-secondary table-bordered table-hover">
-                        <Tableheaddate />
-                        <tbody>
-                          <tr className="bg-dark">
-                            <td>{dataStart[index]}</td>
-                            <td>{dataConclusion[index]}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-dismiss="modal"
-                      >
-                        Ok
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginRight: 5 }}
-                        className="btn btn-success"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#editModal${index}`}
-                        onClick={() => editarTarefa(index)}
-                        title="Editar Tarefa"
-                      >
-                        <Iconedit />
-                      </button>
-                      <button
-                        href="#"
-                        style={{ marginRight: 5 }}
-                        className="btn btn-danger"
-                        onClick={() => confirmarRemocaoTarefa(index)}
-                        title="Excluir Tarefa"
-                      >
-                        <Icondelete />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal de Edição */}
-              <div
-                className="modal fade"
-                id={`editModal${index}`}
-                tabIndex="-1"
-                aria-labelledby={`editModalLabel${index}`}
-                aria-hidden="true"
-              >
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h1
-                        className="modal-title fs-5"
-                        id={`editModalLabel${index}`}
-                      >
-                        Editar Tarefa
-                      </h1>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      <div className="input mb-3">
-                        <Labelnametask />
-                        <input
-                          type="text"
-                          value={novaNomeTarefa}
-                          onChange={(e) => setNovaNomeTarefa(e.target.value)}
-                          className="form-control"
-                          placeholder="nome com no máximo 22 caracteres"
-                        />
-                        <br />
-                        <Labeldescription />
-                        <input
-                          type="text"
-                          value={novaTarefa}
-                          onChange={(e) => setNovaTarefa(e.target.value)}
-                          className="form-control"
-                          placeholder="uma descrição clara de sua tarefa"
-                        />
-                        <br />
-                        <DatePicker
-                          selected={selectedStartDate}
-                          onChange={handleDateStartChange}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de inicio"
-                          className="form-control"
-                          isClearable
-                        />
-                        <br />
-                        <br />
-                        <DatePicker
-                          selected={selectedConclusionDate}
-                          onChange={handleDateConclusionChange}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Data de conclusão"
-                          className="form-control"
-                          isClearable
-                        />
-                      </div>
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        className="btn btn-primary"
-                        type="button"
-                        onClick={() => {
-                          salvarTarefaEditada();
-                        }}
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        data-bs-dismiss="modal"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TaskModals
+              key={index}
+              index={index}
+              nomeTarefa={nomeTarefa}
+              tarefa={tarefa}
+              dataStart={dataStart}
+              dataConclusion={dataConclusion}
+              novaNomeTarefa={novaNomeTarefa}
+              novaTarefa={novaTarefa}
+              selectedStartDate={selectedStartDate}
+              selectedConclusionDate={selectedConclusionDate}
+              setNovaNomeTarefa={setNovaNomeTarefa}
+              setNovaTarefa={setNovaTarefa}
+              handleDateStartChange={handleDateStartChange}
+              handleDateConclusionChange={handleDateConclusionChange}
+              salvarTarefaEditada={salvarTarefaEditada}
+              abrirModalTarefa={abrirModalTarefa}
+              editarTarefa={editarTarefa}
+              confirmarRemocaoTarefa={confirmarRemocaoTarefa}
+            />
           ))
         )}
       </div>
