@@ -6,6 +6,15 @@ import ScrollReveal from "scrollreveal";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
+//vareaveis de estados
+import { StateVariables } from "../../../Utils/StateVariables";
+//useEffects
+import {
+  useDeleteAllButtonEffect,
+  useExportButtonEffect,
+  useTaskContEffect,
+  useScrollRevealEffect,
+} from "../../../Utils/useEffects";
 //components
 import Deleteallbutton from "../../Buttons/Delete_all_buton";
 import Titleinfotasks from "../../Titles/Title_info_tasks";
@@ -14,8 +23,46 @@ import NewTaskModal from "../../Modals/NewTaskModal";
 import ImportModal from "../../Modals/ImportModal";
 import ExportModal from "../../Modals/ExportModal";
 import TaskModals from "../../Modals/TaskModals";
+import Titleactivetasks from "../../Titles/Title_active tasks";
 
 export default function Search() {
+  const {
+    novaTarefa,
+    setNovaTarefa,
+    novaNomeTarefa,
+    setNovaNomeTarefa,
+    selectedStartDate,
+    setSelectedStartDate,
+    selectedConclusionDate,
+    setSelectedConclusionDate,
+    indiceEdicaoTarefa,
+    setIndiceEdicaoTarefa,
+    novaDataConclusion,
+    novaData,
+    setNovaDataConclusion,
+    setNovaData,
+    showTaskModal,
+    setShowTaskModal,
+    showExportButton,
+    setShowExportButton,
+    showDeleteAllButton,
+    setShowDeleteAllButton,
+    showTaskCont,
+    setShowTaskCont,
+    tarefas,
+    setTarefas,
+    nomeTarefa,
+    setNomeTarefa,
+    dataStart,
+    setDataStart,
+    dataConclusion,
+    setDataConclusion,
+    importedTasks,
+    setImportedTasks,
+    showImportModal,
+    setShowImportModal,
+  } = StateVariables();
+
   const confirmarRemocaoTarefa = (index) => {
     Swal.fire({
       title: "Confirmação",
@@ -38,22 +85,6 @@ export default function Search() {
       }
     });
   };
-
-  const [tarefas, setTarefas] = useState([]);
-  const [novaTarefa, setNovaTarefa] = useState("");
-  const [nomeTarefa, setNomeTarefa] = useState([]);
-  const [novaNomeTarefa, setNovaNomeTarefa] = useState("");
-  const [novaData, setNovaData] = useState("");
-  const [novaDataConclusion, setNovaDataConclusion] = useState("");
-  const [dataStart, setDataStart] = useState([]);
-  const [dataConclusion, setDataConclusion] = useState([]);
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedConclusionDate, setSelectedConclusionDate] = useState(null);
-  const [indiceEdicaoTarefa, setIndiceEdicaoTarefa] = useState(null);
-  const [showDeleteAllButton, setShowDeleteAllButton] = useState(false);
-  const [showExportButton, setShowExportButton] = useState(false);
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showTaskCont, setShowTaskCont] = useState(false);
 
   const adicionarTarefa = () => {
     const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
@@ -223,30 +254,11 @@ export default function Search() {
     });
   };
 
-  useEffect(() => {
-    // Verifique se há mais de uma tarefa para mostrar o botão "Excluir Todas as Tarefas"
-    setShowDeleteAllButton(tarefas.length > 1);
-  }, [tarefas]);
-
-  useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
-    setShowExportButton(tarefas.length > 0);
-  }, [tarefas]);
-
-  useEffect(() => {
-    // Verifique se há mais de 0 tarefa para mostrar o botão "Excluir Todas as Tarefas"
-    setShowTaskCont(tarefas.length > 0);
-  }, [tarefas]);
-
-  useEffect(() => {
-    ScrollReveal().reveal(".scroll-reveal", {
-      duration: 1000,
-      distance: "20px",
-      easing: "ease-in-out",
-      origin: "bottom",
-      delay: 100,
-    });
-  }, []);
+  //useEffect
+  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
+  useExportButtonEffect(setShowExportButton, tarefas);
+  useTaskContEffect(setShowTaskCont, tarefas);
+  useScrollRevealEffect();
 
   // Função para exportar a lista de tarefas em um arquivo de texto
   const exportarListaTarefasTXT = () => {
@@ -346,9 +358,6 @@ export default function Search() {
     a.click();
     window.URL.revokeObjectURL(url);
   };
-
-  const [importedTasks, setImportedTasks] = useState("");
-  const [showImportModal, setShowImportModal] = useState(false);
 
   const importarTarefas = () => {
     Swal.fire({
@@ -465,27 +474,26 @@ export default function Search() {
               importarTarefas={importarTarefas}
               adicionarTarefasImportadas={adicionarTarefasImportadas}
             />
-            {showExportButton && (
-              <ExportModal
-                exportarListaTarefasTXT={exportarListaTarefasTXT}
-                exportarListaTarefasCSV={exportarListaTarefasCSV}
-                exportarListaTarefasJSON={exportarListaTarefasJSON}
-              />
-            )}
 
-            {showDeleteAllButton && (
-              <Deleteallbutton excluirTodasAsTarefas={excluirTodasAsTarefas} />
-            )}
+            <ExportModal
+              exportarListaTarefasTXT={exportarListaTarefasTXT}
+              exportarListaTarefasCSV={exportarListaTarefasCSV}
+              exportarListaTarefasJSON={exportarListaTarefasJSON}
+              showExportButton={showExportButton}
+            />
+
+            <Deleteallbutton
+              showDeleteAllButton={showDeleteAllButton}
+              excluirTodasAsTarefas={excluirTodasAsTarefas}
+            />
           </div>
         </div>
       </div>
 
-      {/*Quantas Tarefas tem ativa*/}
-      {showTaskCont && (
-        <h4 className="fs-4 text-center" style={{ marginTop: 20 }}>
-          Total de Tarefas ativas: {contarTarefas()}
-        </h4>
-      )}
+      <Titleactivetasks
+        showTaskCont={showTaskCont}
+        contarTarefas={contarTarefas}
+      />
 
       <br />
 
