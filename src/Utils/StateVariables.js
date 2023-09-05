@@ -16,6 +16,8 @@ export const StateVariables = () => {
   const [showExportButton, setShowExportButton] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showTaskCont, setShowTaskCont] = useState(false);
+  const [importedTasks, setImportedTasks] = useState("");
+  const [showImportModal, setShowImportModal] = useState(false);
 
   return {
     novaTarefa,
@@ -48,5 +50,9 @@ export const StateVariables = () => {
     setDataStart,
     dataConclusion,
     setDataConclusion,
+    importedTasks,
+    setImportedTasks,
+    showImportModal,
+    setShowImportModal,
   };
 };

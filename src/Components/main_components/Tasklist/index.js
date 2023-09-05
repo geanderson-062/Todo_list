@@ -57,6 +57,10 @@ export default function Search() {
     setDataStart,
     dataConclusion,
     setDataConclusion,
+    importedTasks,
+    setImportedTasks,
+    showImportModal,
+    setShowImportModal,
   } = StateVariables();
 
   const confirmarRemocaoTarefa = (index) => {
@@ -250,6 +254,7 @@ export default function Search() {
     });
   };
 
+  //useEffect
   useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
   useExportButtonEffect(setShowExportButton, tarefas);
   useTaskContEffect(setShowTaskCont, tarefas);
@@ -353,9 +358,6 @@ export default function Search() {
     a.click();
     window.URL.revokeObjectURL(url);
   };
-
-  const [importedTasks, setImportedTasks] = useState("");
-  const [showImportModal, setShowImportModal] = useState(false);
 
   const importarTarefas = () => {
     Swal.fire({
