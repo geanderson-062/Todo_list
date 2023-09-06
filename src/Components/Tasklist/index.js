@@ -6,23 +6,23 @@ import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
 //vareaveis de estados
-import { StateVariables } from "../../../Utils/StateVariables";
+import { StateVariables } from "../../Utils/StateVariables";
 //useEffects
 import {
   useDeleteAllButtonEffect,
   useExportButtonEffect,
   useTaskContEffect,
   useScrollRevealEffect,
-} from "../../../Utils/useEffects";
+} from "../../Utils/useEffects";
 //components
-import Deleteallbutton from "../../Buttons/Delete_all_buton";
-import Titleinfotasks from "../../Titles/Title_info_tasks";
+import Deleteallbutton from "../Buttons/Delete_all_buton";
+import Titleinfotasks from "../Titles/Title_info_tasks";
 //modals
-import NewTaskModal from "../../Modals/NewTaskModal";
-import ImportModal from "../../Modals/ImportModal";
-import ExportModal from "../../Modals/ExportModal";
-import MainButtons from "../../Buttons/TaskMainButtons";
-import Titleactivetasks from "../../Titles/Title_active tasks";
+import NewTaskModal from "../Modals/NewTaskModal";
+import ImportModal from "../Modals/ImportModal";
+import ExportModal from "../Modals/ExportModal";
+import MainButtons from "../Buttons/TaskMainButtons";
+import Titleactivetasks from "../Titles/Title_active tasks";
 
 export default function Search() {
   //vareaveis de estado
