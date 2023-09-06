@@ -173,25 +173,28 @@ const Tarefa = ({
                   placeholder="uma descrição clara de sua tarefa"
                 />
                 <br />
-                <LabelDataStart />
+                <LabelDataStart dataStart={dataStart} index={index} />
                 <br />
                 <DatePicker
                   selected={selectedStartDate}
                   onChange={handleDateStartChange}
                   dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de inicio"
+                  placeholderText="Nova data de inicio"
                   className="form-control"
                   isClearable
                 />
                 <br />
                 <br />
-                <LabelDataConclusion />
+                <LabelDataConclusion
+                  dataConclusion={dataConclusion}
+                  index={index}
+                />
                 <br />
                 <DatePicker
                   selected={selectedConclusionDate}
                   onChange={handleDateConclusionChange}
                   dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de conclusão"
+                  placeholderText="Nova data de conclusão"
                   className="form-control"
                   isClearable
                 />

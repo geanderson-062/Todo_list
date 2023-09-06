@@ -1,7 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class index extends Component {
-  render() {
-    return <label class="form-label">Data de conclusão digitada antes</label>;
-  }
-}
+const Tarefa = ({ index, dataConclusion }) => {
+  return (
+    <label class="form-label">
+      Data de conclusão digitada antes:{" "}
+      <b className="text-danger">{dataConclusion[index]}</b>
+    </label>
+  );
+};
+
+export default Tarefa;
