@@ -13,17 +13,39 @@ const Tarefa = ({
 }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [, setHasTasksToEdit] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(0);
+  const [isExpired, setIsExpired] = useState(false);
+  const [isDueTomorrow, setIsDueTomorrow] = useState(false); // Novo estado para verificar se a tarefa vence amanhã
 
-  // Use useEffect para verificar se há tarefas sempre que a matriz de tarefas for alterada
   useEffect(() => {
     if (nomeTarefa && nomeTarefa.length > 0) {
       setHasTasksToEdit(true);
     } else {
       setHasTasksToEdit(false);
-      // Se não houver tarefas, feche ambos os modais
       setShowTaskModal(false);
     }
   }, [nomeTarefa]);
+
+  useEffect(() => {
+    if (dataStart[index] && dataConclusion[index]) {
+      const startDate = new Date(dataStart[index]);
+      const endDate = new Date(dataConclusion[index]);
+      const currentDate = new Date();
+
+      const timeDiff = endDate - currentDate;
+      const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+      setDaysRemaining(daysRemaining);
+
+      setIsExpired(currentDate > endDate);
+
+      // Verificar se a tarefa vence amanhã
+      const tomorrow = new Date();
+      tomorrow.setDate(currentDate.getDate() + 1);
+      const isDueTomorrow = currentDate < endDate && endDate <= tomorrow;
+      setIsDueTomorrow(isDueTomorrow);
+    }
+  }, [dataStart, dataConclusion, index]);
 
   return (
     <>
@@ -83,6 +105,17 @@ const Tarefa = ({
                   </tr>
                 </tbody>
               </table>
+              {isExpired ? (
+                <p className="text-danger text-center fs-5">Tarefa expirada!</p>
+              ) : isDueTomorrow ? (
+                <p className="text-warning text-center fs-5">
+                  Tarefa vence amanhã!
+                </p>
+              ) : (
+                <p className="text-center text-primary fs-5">
+                  Dias restantes: {daysRemaining}
+                </p>
+              )}
             </div>
             <div className="modal-footer">
               <button
