@@ -1,50 +1,52 @@
 import React from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-//title compoenent
-import Titlemodalnewtask from "../../Titles/Title_modal_new_task";
-//label component
-import Labelnametask from "../../Labels/Label_name_task";
-import Labeldescription from "../../Labels/Label_description";
-import Iconadd from "../../Icons/Icon_add";
+import DatePicker from "react-datepicker"; // Certifique-se de importar o DatePicker corretamente
+import Labelnametask from "../../Labels/Label_name_task_edit";
+import Labeldescription from "../../Labels/Label_description_edit";
+import Iconedit from "../../Icons/Icon_edit";
+import LabelDataStart from "../../Labels/Label_edit_data_start";
+import LabelDataConclusion from "../../Labels/Label_edit_data_conclusion";
 
-const NewTaskModal = ({
+const Tarefa = ({
+  index,
+  dataStart,
+  dataConclusion,
   novaNomeTarefa,
-  setNovaNomeTarefa,
   novaTarefa,
-  setNovaTarefa,
   selectedStartDate,
-  handleDateStartChange,
   selectedConclusionDate,
+  setNovaNomeTarefa,
+  setNovaTarefa,
+  handleDateStartChange,
   handleDateConclusionChange,
-  adicionarTarefa,
-  adicionarNomeTarefa,
+  salvarTarefaEditada,
+  editarTarefa,
 }) => {
   return (
-    /* Modal de Nova tarefa  */
     <>
       <button
-        type="button"
-        className="btn btn-primary btn-main_custom-size mb-2 scroll-reveal"
+        href="#"
+        style={{ marginRight: 5, marginLeft: 5 }}
+        className="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#newtask"
+        data-bs-target={`#editModal${index}`}
+        onClick={() => editarTarefa(index)}
+        title="Editar Tarefa"
       >
-        Nova tarefa
-        <Iconadd />
+        <Iconedit />
       </button>
       <div
         className="modal fade"
-        id="newtask"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        aria-labelledby="exampleModalLabel"
+        id={`editModal${index}`}
         tabIndex="-1"
+        aria-labelledby={`editModalLabel${index}`}
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <Titlemodalnewtask />
+              <h1 className="modal-title fs-5" id={`editModalLabel${index}`}>
+                Editar Tarefa
+              </h1>
               <button
                 type="button"
                 className="btn-close"
@@ -60,7 +62,7 @@ const NewTaskModal = ({
                   value={novaNomeTarefa}
                   onChange={(e) => setNovaNomeTarefa(e.target.value)}
                   className="form-control"
-                  placeholder="nome com no máximo 18 caracteres"
+                  placeholder="nome com no máximo 22 caracteres"
                 />
                 <br />
                 <Labeldescription />
@@ -72,21 +74,28 @@ const NewTaskModal = ({
                   placeholder="uma descrição clara de sua tarefa"
                 />
                 <br />
+                <LabelDataStart dataStart={dataStart} index={index} />
+                <br />
                 <DatePicker
                   selected={selectedStartDate}
                   onChange={handleDateStartChange}
                   dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de inicio"
+                  placeholderText="Nova data de inicio"
                   className="form-control"
                   isClearable
                 />
                 <br />
                 <br />
+                <LabelDataConclusion
+                  dataConclusion={dataConclusion}
+                  index={index}
+                />
+                <br />
                 <DatePicker
                   selected={selectedConclusionDate}
                   onChange={handleDateConclusionChange}
                   dateFormat="dd/MM/yyyy"
-                  placeholderText="Data de conclusão"
+                  placeholderText="Nova data de conclusão"
                   className="form-control"
                   isClearable
                 />
@@ -97,11 +106,10 @@ const NewTaskModal = ({
                 className="btn btn-primary"
                 type="button"
                 onClick={() => {
-                  adicionarTarefa();
-                  adicionarNomeTarefa();
+                  salvarTarefaEditada();
                 }}
               >
-                Adicionar
+                Salvar
               </button>
               <button
                 type="button"
@@ -118,4 +126,4 @@ const NewTaskModal = ({
   );
 };
 
-export default NewTaskModal;
+export default Tarefa;

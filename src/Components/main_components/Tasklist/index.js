@@ -21,7 +21,7 @@ import Titleinfotasks from "../../Titles/Title_info_tasks";
 import NewTaskModal from "../../Modals/NewTaskModal";
 import ImportModal from "../../Modals/ImportModal";
 import ExportModal from "../../Modals/ExportModal";
-import TaskModals from "../../Modals/TaskModals";
+import MainButtons from "../../Buttons/TaskMainButtons";
 import Titleactivetasks from "../../Titles/Title_active tasks";
 
 export default function Search() {
@@ -93,7 +93,7 @@ export default function Search() {
   };
 
   const adicionarTarefa = () => {
-    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+    const MAX_CARACTERES_NOME_TAREFA = 18; // Defina o valor máximo de caracteres permitidos
 
     if (
       novaTarefa.trim() !== "" &&
@@ -145,7 +145,7 @@ export default function Search() {
   };
 
   const salvarTarefaEditada = () => {
-    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+    const MAX_CARACTERES_NOME_TAREFA = 18; // Defina o valor máximo de caracteres permitidos
 
     if (
       novaTarefa.trim() !== "" &&
@@ -503,7 +503,7 @@ export default function Search() {
           <Titleinfotasks />
         ) : (
           tarefas.map((tarefa, index) => (
-            <TaskModals
+            <MainButtons
               key={index}
               index={index}
               nomeTarefa={nomeTarefa}
