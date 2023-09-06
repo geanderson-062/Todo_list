@@ -13,17 +13,27 @@ const Tarefa = ({
 }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [, setHasTasksToEdit] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(0); // Estado para armazenar os dias restantes
 
-  // Use useEffect para verificar se há tarefas sempre que a matriz de tarefas for alterada
   useEffect(() => {
     if (nomeTarefa && nomeTarefa.length > 0) {
       setHasTasksToEdit(true);
     } else {
       setHasTasksToEdit(false);
-      // Se não houver tarefas, feche ambos os modais
       setShowTaskModal(false);
     }
   }, [nomeTarefa]);
+
+  useEffect(() => {
+    // Calcular os dias restantes entre dataStart e dataConclusion
+    if (dataStart[index] && dataConclusion[index]) {
+      const startDate = new Date(dataStart[index]);
+      const endDate = new Date(dataConclusion[index]);
+      const timeDiff = endDate - startDate;
+      const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      setDaysRemaining(daysRemaining);
+    }
+  }, [dataStart, dataConclusion, index]);
 
   return (
     <>
@@ -83,6 +93,11 @@ const Tarefa = ({
                   </tr>
                 </tbody>
               </table>
+              {daysRemaining >= 0 && (
+                <p className="fs-6 text-danger text-center">
+                  Falta: {daysRemaining} dia para concluir a tarefa.
+                </p>
+              )}
             </div>
             <div className="modal-footer">
               <button
