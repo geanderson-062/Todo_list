@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 //libs
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Swal from "sweetalert2";
-import ScrollReveal from "scrollreveal";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
@@ -26,6 +25,7 @@ import TaskModals from "../../Modals/TaskModals";
 import Titleactivetasks from "../../Titles/Title_active tasks";
 
 export default function Search() {
+  //vareaveis de estado
   const {
     novaTarefa,
     setNovaTarefa,
@@ -62,6 +62,12 @@ export default function Search() {
     showImportModal,
     setShowImportModal,
   } = StateVariables();
+
+  //useEffect
+  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
+  useExportButtonEffect(setShowExportButton, tarefas);
+  useTaskContEffect(setShowTaskCont, tarefas);
+  useScrollRevealEffect();
 
   const confirmarRemocaoTarefa = (index) => {
     Swal.fire({
@@ -253,12 +259,6 @@ export default function Search() {
       }
     });
   };
-
-  //useEffect
-  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
-  useExportButtonEffect(setShowExportButton, tarefas);
-  useTaskContEffect(setShowTaskCont, tarefas);
-  useScrollRevealEffect();
 
   // Função para exportar a lista de tarefas em um arquivo de texto
   const exportarListaTarefasTXT = () => {
