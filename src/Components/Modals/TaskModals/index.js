@@ -14,6 +14,7 @@ const Tarefa = ({
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [, setHasTasksToEdit] = useState(false);
   const [daysRemaining, setDaysRemaining] = useState(0); // Estado para armazenar os dias restantes
+  const [isExpired, setIsExpired] = useState(false); // Estado para verificar se a tarefa está expirada
 
   useEffect(() => {
     if (nomeTarefa && nomeTarefa.length > 0) {
@@ -29,9 +30,15 @@ const Tarefa = ({
     if (dataStart[index] && dataConclusion[index]) {
       const startDate = new Date(dataStart[index]);
       const endDate = new Date(dataConclusion[index]);
-      const timeDiff = endDate - startDate;
-      const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      const currentDate = new Date();
+
+      const timeDiff = endDate - currentDate;
+      const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
       setDaysRemaining(daysRemaining);
+
+      // Verificar se a tarefa está expirada
+      setIsExpired(currentDate > endDate);
     }
   }, [dataStart, dataConclusion, index]);
 
@@ -93,9 +100,11 @@ const Tarefa = ({
                   </tr>
                 </tbody>
               </table>
-              {daysRemaining >= 0 && (
-                <p className="fs-6 text-danger text-center">
-                  Falta: {daysRemaining} dia para concluir a tarefa.
+              {isExpired ? (
+                <p className="text-danger text-center fs-5">Tarefa expirada!</p>
+              ) : (
+                <p className="text-center text-primary fs-5">
+                  Dias restantes: {daysRemaining}
                 </p>
               )}
             </div>
