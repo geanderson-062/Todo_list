@@ -3,10 +3,12 @@ import DatePicker from "react-datepicker"; // Certifique-se de importar o DatePi
 
 import Tableheaddate from "../../Tables/Table_head_date/index";
 import Tableheaddescription from "../../Tables/Table_head_description";
-import Labelnametask from "../../Labels/Label_name_task";
-import Labeldescription from "../../Labels/Label_description";
+import Labelnametask from "../../Labels/Label_name_task_edit";
+import Labeldescription from "../../Labels/Label_description_edit";
 import Iconedit from "../../Icons/Icon_edit";
 import Icondelete from "../../Icons/Icon_delete";
+import LabelDataStart from "../../Labels/Label_edit_data_start";
+import LabelDataConclusion from "../../Labels/Label_edit_data_conclusion";
 
 const Tarefa = ({
   index,
@@ -171,6 +173,8 @@ const Tarefa = ({
                   placeholder="uma descrição clara de sua tarefa"
                 />
                 <br />
+                <LabelDataStart />
+                <br />
                 <DatePicker
                   selected={selectedStartDate}
                   onChange={handleDateStartChange}
@@ -180,6 +184,8 @@ const Tarefa = ({
                   isClearable
                 />
                 <br />
+                <br />
+                <LabelDataConclusion />
                 <br />
                 <DatePicker
                   selected={selectedConclusionDate}
