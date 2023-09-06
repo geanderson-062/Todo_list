@@ -5,7 +5,7 @@ import "bootstrap/dist/js/bootstrap.js";
 //conponents
 import Navbar from "./Components/Navbar";
 import Tasklist from "./Components/Tasklist";
-import Animation from "./Components/main_components/Animation";
+import Animation from "./Components/Animation";
 import Footer from "./Components/Footer";
 
 function App() {
