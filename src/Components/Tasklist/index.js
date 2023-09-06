@@ -1,31 +1,31 @@
 /* eslint-disable no-unused-vars */
 //libs
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Swal from "sweetalert2";
-import ScrollReveal from "scrollreveal";
 import "react-datepicker/dist/react-datepicker.css";
 //styles
 import "./style.css";
 //vareaveis de estados
-import { StateVariables } from "../../../Utils/StateVariables";
+import { StateVariables } from "../../Utils/StateVariables";
 //useEffects
 import {
   useDeleteAllButtonEffect,
   useExportButtonEffect,
   useTaskContEffect,
   useScrollRevealEffect,
-} from "../../../Utils/useEffects";
+} from "../../Utils/useEffects";
 //components
-import Deleteallbutton from "../../Buttons/Delete_all_buton";
-import Titleinfotasks from "../../Titles/Title_info_tasks";
+import Deleteallbutton from "../Buttons/Delete_all_buton";
+import Titleinfotasks from "../Titles/Title_info_tasks";
 //modals
-import NewTaskModal from "../../Modals/NewTaskModal";
-import ImportModal from "../../Modals/ImportModal";
-import ExportModal from "../../Modals/ExportModal";
-import TaskModals from "../../Modals/TaskModals";
-import Titleactivetasks from "../../Titles/Title_active tasks";
+import NewTaskModal from "../Modals/NewTaskModal";
+import ImportModal from "../Modals/ImportModal";
+import ExportModal from "../Modals/ExportModal";
+import MainButtons from "../Buttons/TaskMainButtons";
+import Titleactivetasks from "../Titles/Title_active tasks";
 
 export default function Search() {
+  //vareaveis de estado
   const {
     novaTarefa,
     setNovaTarefa,
@@ -63,6 +63,12 @@ export default function Search() {
     setShowImportModal,
   } = StateVariables();
 
+  //useEffect
+  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
+  useExportButtonEffect(setShowExportButton, tarefas);
+  useTaskContEffect(setShowTaskCont, tarefas);
+  useScrollRevealEffect();
+
   const confirmarRemocaoTarefa = (index) => {
     Swal.fire({
       title: "Confirmação",
@@ -87,7 +93,7 @@ export default function Search() {
   };
 
   const adicionarTarefa = () => {
-    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+    const MAX_CARACTERES_NOME_TAREFA = 18; // Defina o valor máximo de caracteres permitidos
 
     if (
       novaTarefa.trim() !== "" &&
@@ -139,7 +145,7 @@ export default function Search() {
   };
 
   const salvarTarefaEditada = () => {
-    const MAX_CARACTERES_NOME_TAREFA = 22; // Defina o valor máximo de caracteres permitidos
+    const MAX_CARACTERES_NOME_TAREFA = 18; // Defina o valor máximo de caracteres permitidos
 
     if (
       novaTarefa.trim() !== "" &&
@@ -253,12 +259,6 @@ export default function Search() {
       }
     });
   };
-
-  //useEffect
-  useDeleteAllButtonEffect(setShowDeleteAllButton, tarefas);
-  useExportButtonEffect(setShowExportButton, tarefas);
-  useTaskContEffect(setShowTaskCont, tarefas);
-  useScrollRevealEffect();
 
   // Função para exportar a lista de tarefas em um arquivo de texto
   const exportarListaTarefasTXT = () => {
@@ -503,7 +503,7 @@ export default function Search() {
           <Titleinfotasks />
         ) : (
           tarefas.map((tarefa, index) => (
-            <TaskModals
+            <MainButtons
               key={index}
               index={index}
               nomeTarefa={nomeTarefa}
