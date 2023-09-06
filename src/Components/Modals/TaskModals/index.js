@@ -13,8 +13,9 @@ const Tarefa = ({
 }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [, setHasTasksToEdit] = useState(false);
-  const [daysRemaining, setDaysRemaining] = useState(0); // Estado para armazenar os dias restantes
-  const [isExpired, setIsExpired] = useState(false); // Estado para verificar se a tarefa está expirada
+  const [daysRemaining, setDaysRemaining] = useState(0);
+  const [isExpired, setIsExpired] = useState(false);
+  const [isDueTomorrow, setIsDueTomorrow] = useState(false); // Novo estado para verificar se a tarefa vence amanhã
 
   useEffect(() => {
     if (nomeTarefa && nomeTarefa.length > 0) {
@@ -26,7 +27,6 @@ const Tarefa = ({
   }, [nomeTarefa]);
 
   useEffect(() => {
-    // Calcular os dias restantes entre dataStart e dataConclusion
     if (dataStart[index] && dataConclusion[index]) {
       const startDate = new Date(dataStart[index]);
       const endDate = new Date(dataConclusion[index]);
@@ -37,8 +37,13 @@ const Tarefa = ({
 
       setDaysRemaining(daysRemaining);
 
-      // Verificar se a tarefa está expirada
       setIsExpired(currentDate > endDate);
+
+      // Verificar se a tarefa vence amanhã
+      const tomorrow = new Date();
+      tomorrow.setDate(currentDate.getDate() + 1);
+      const isDueTomorrow = currentDate < endDate && endDate <= tomorrow;
+      setIsDueTomorrow(isDueTomorrow);
     }
   }, [dataStart, dataConclusion, index]);
 
@@ -102,6 +107,10 @@ const Tarefa = ({
               </table>
               {isExpired ? (
                 <p className="text-danger text-center fs-5">Tarefa expirada!</p>
+              ) : isDueTomorrow ? (
+                <p className="text-warning text-center fs-5">
+                  Tarefa vence amanhã!
+                </p>
               ) : (
                 <p className="text-center text-primary fs-5">
                   Dias restantes: {daysRemaining}
